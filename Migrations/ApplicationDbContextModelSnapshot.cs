@@ -35,7 +35,7 @@ namespace Raythos.Migrations
                         .HasMaxLength(15)
                         .HasColumnType("nvarchar(15)");
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
@@ -58,10 +58,10 @@ namespace Raythos.Migrations
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
-                    b.Property<DateTime>("UpdatedAt")
+                    b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
@@ -73,13 +73,13 @@ namespace Raythos.Migrations
                         {
                             Id = 1L,
                             ContactNo = "1234567890",
-                            CreatedAt = new DateTime(2023, 12, 6, 1, 10, 56, 202, DateTimeKind.Local).AddTicks(9225),
+                            CreatedAt = new DateTime(2023, 12, 6, 2, 9, 35, 109, DateTimeKind.Local).AddTicks(3107),
                             Email = "admin@system.com",
                             FName = "Admin",
                             IsAdmin = true,
                             LName = "System",
                             Password = "admin",
-                            UpdatedAt = new DateTime(2023, 12, 6, 1, 10, 56, 202, DateTimeKind.Local).AddTicks(9236)
+                            UpdatedAt = new DateTime(2023, 12, 6, 2, 9, 35, 109, DateTimeKind.Local).AddTicks(3121)
                         });
                 });
 #pragma warning restore 612, 618
