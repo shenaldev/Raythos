@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Raythos;
@@ -39,7 +39,7 @@ builder.Services
     });
 builder.Services.AddAuthorization();
 
-//MYSQL SERVICE REGISTER
+//SQL SERVICE REGISTER
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {

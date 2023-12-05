@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Raythos;
 
@@ -11,9 +12,11 @@ using Raythos;
 namespace Raythos.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231205192235_Init")]
+    partial class Init
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -66,21 +69,7 @@ namespace Raythos.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1L,
-                            ContactNo = "1234567890",
-                            CreatedAt = new DateTime(2023, 12, 6, 1, 10, 56, 202, DateTimeKind.Local).AddTicks(9225),
-                            Email = "admin@system.com",
-                            FName = "Admin",
-                            IsAdmin = true,
-                            LName = "System",
-                            Password = "admin",
-                            UpdatedAt = new DateTime(2023, 12, 6, 1, 10, 56, 202, DateTimeKind.Local).AddTicks(9236)
-                        });
+                    b.ToTable("Users");
                 });
 #pragma warning restore 612, 618
         }

@@ -12,8 +12,8 @@ using Raythos;
 namespace Raythos.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231202233820_Init")]
-    partial class Init
+    [Migration("20231205194059_SeedUsersTable")]
+    partial class SeedUsersTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,41 +27,63 @@ namespace Raythos.Migrations
 
             modelBuilder.Entity("Raythos.Models.User", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<string>("ContactNo")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(15)
+                        .HasColumnType("nvarchar(15)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
 
                     b.Property<string>("FName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
 
                     b.Property<bool>("IsAdmin")
                         .HasColumnType("bit");
 
                     b.Property<string>("LName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            ContactNo = "1234567890",
+                            CreatedAt = new DateTime(2023, 12, 6, 1, 10, 56, 202, DateTimeKind.Local).AddTicks(9225),
+                            Email = "admin@system.com",
+                            FName = "Admin",
+                            IsAdmin = true,
+                            LName = "System",
+                            Password = "admin",
+                            UpdatedAt = new DateTime(2023, 12, 6, 1, 10, 56, 202, DateTimeKind.Local).AddTicks(9236)
+                        });
                 });
 #pragma warning restore 612, 618
         }
