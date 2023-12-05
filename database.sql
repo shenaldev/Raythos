@@ -1,0 +1,27 @@
+CREATE DATABASE IF NOT EXISTS `raythos`;
+
+DROP TABLE IF EXISTS `raythos`.`users`;
+CREATE TABLE `raythos`.`users` (
+  `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `fname` VARCHAR(150) NOT NULL,
+  `lname` VARCHAR(150) NOT NULL,
+  `email` VARCHAR(150) NOT NULL,
+  `password` VARCHAR(250) NOT NULL,
+  `contact_no` VARCHAR(20) NOT NULL,
+  `is_admin` BOOLEAN NOT NULL DEFAULT FALSE,
+  `created_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP NULL,
+  UNIQUE INDEX `email_UNIQUE` (`email` ASC))
+ENGINE = InnoDB;
+
+DROP TABLE IF EXISTS `raythos`.`countries`;
+CREATE TABLE `raythos`.`countries` (
+  `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `name` VARCHAR(150) NOT NULL,
+  `slug` VARCHAR(5) NOT NULL,
+  `created_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP NULL,
+  UNIQUE INDEX `slug_UNIQUE` (`slug` ASC))
+ENGINE = InnoDB;
+
+
