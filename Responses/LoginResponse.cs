@@ -2,10 +2,11 @@
 {
     public class LoginResponse
     {
-        public string FName { get; set; }
-        public string LName { get; set; }
-        public string Email { get; set; }
-        public bool IsAdmin { get; set; }
-        public string Token { get; set; }
+        public Int64 UserID { get; set; }
+        public required string FName { get; set; }
+        public required string LName { get; set; }
+        public required string Email { get; set; }
+        public required bool IsAdmin { get; set; }
+        public string? Token { get; set; }
     }
 }

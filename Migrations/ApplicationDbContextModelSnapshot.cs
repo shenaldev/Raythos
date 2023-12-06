@@ -22,13 +22,1564 @@ namespace Raythos.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Raythos.Models.User", b =>
+            modelBuilder.Entity("Raythos.Models.Address", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<long>("AddressID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("AddressID"));
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<long>("CountryId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("PostalCode")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("Street")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("AddressID");
+
+                    b.HasIndex("CountryId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Addresses");
+                });
+
+            modelBuilder.Entity("Raythos.Models.Country", b =>
+                {
+                    b.Property<long>("CountryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("CountryId"));
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(3)
+                        .HasColumnType("nvarchar(3)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("CountryId");
+
+                    b.ToTable("Countries", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            CountryId = 1L,
+                            Code = "93",
+                            Name = "Afghanistan"
+                        },
+                        new
+                        {
+                            CountryId = 2L,
+                            Code = "358",
+                            Name = "Åland Islands"
+                        },
+                        new
+                        {
+                            CountryId = 3L,
+                            Code = "355",
+                            Name = "Albania"
+                        },
+                        new
+                        {
+                            CountryId = 4L,
+                            Code = "213",
+                            Name = "Algeria"
+                        },
+                        new
+                        {
+                            CountryId = 5L,
+                            Code = "1",
+                            Name = "American Samoa"
+                        },
+                        new
+                        {
+                            CountryId = 6L,
+                            Code = "376",
+                            Name = "Andorra"
+                        },
+                        new
+                        {
+                            CountryId = 7L,
+                            Code = "244",
+                            Name = "Angola"
+                        },
+                        new
+                        {
+                            CountryId = 8L,
+                            Code = "1",
+                            Name = "Anguilla"
+                        },
+                        new
+                        {
+                            CountryId = 9L,
+                            Code = "1",
+                            Name = "Antigua and Barbuda"
+                        },
+                        new
+                        {
+                            CountryId = 10L,
+                            Code = "54",
+                            Name = "Argentina"
+                        },
+                        new
+                        {
+                            CountryId = 11L,
+                            Code = "374",
+                            Name = "Armenia"
+                        },
+                        new
+                        {
+                            CountryId = 12L,
+                            Code = "297",
+                            Name = "Aruba"
+                        },
+                        new
+                        {
+                            CountryId = 13L,
+                            Code = "61",
+                            Name = "Australia"
+                        },
+                        new
+                        {
+                            CountryId = 14L,
+                            Code = "43",
+                            Name = "Austria"
+                        },
+                        new
+                        {
+                            CountryId = 15L,
+                            Code = "994",
+                            Name = "Azerbaijan"
+                        },
+                        new
+                        {
+                            CountryId = 16L,
+                            Code = "1",
+                            Name = "Bahamas"
+                        },
+                        new
+                        {
+                            CountryId = 17L,
+                            Code = "973",
+                            Name = "Bahrain"
+                        },
+                        new
+                        {
+                            CountryId = 18L,
+                            Code = "880",
+                            Name = "Bangladesh"
+                        },
+                        new
+                        {
+                            CountryId = 19L,
+                            Code = "1",
+                            Name = "Barbados"
+                        },
+                        new
+                        {
+                            CountryId = 20L,
+                            Code = "375",
+                            Name = "Belarus"
+                        },
+                        new
+                        {
+                            CountryId = 21L,
+                            Code = "32",
+                            Name = "Belgium"
+                        },
+                        new
+                        {
+                            CountryId = 22L,
+                            Code = "501",
+                            Name = "Belize"
+                        },
+                        new
+                        {
+                            CountryId = 23L,
+                            Code = "229",
+                            Name = "Benin"
+                        },
+                        new
+                        {
+                            CountryId = 24L,
+                            Code = "1",
+                            Name = "Bermuda"
+                        },
+                        new
+                        {
+                            CountryId = 25L,
+                            Code = "975",
+                            Name = "Bhutan"
+                        },
+                        new
+                        {
+                            CountryId = 26L,
+                            Code = "591",
+                            Name = "Bolivia"
+                        },
+                        new
+                        {
+                            CountryId = 27L,
+                            Code = "599",
+                            Name = "Bonaire, Sint Eustatius and Saba"
+                        },
+                        new
+                        {
+                            CountryId = 28L,
+                            Code = "387",
+                            Name = "Bosnia and Herzegovina"
+                        },
+                        new
+                        {
+                            CountryId = 29L,
+                            Code = "267",
+                            Name = "Botswana"
+                        },
+                        new
+                        {
+                            CountryId = 30L,
+                            Code = "55",
+                            Name = "Brazil"
+                        },
+                        new
+                        {
+                            CountryId = 31L,
+                            Code = "246",
+                            Name = "British Indian Ocean Territory"
+                        },
+                        new
+                        {
+                            CountryId = 32L,
+                            Code = "1",
+                            Name = "British Virgin Islands"
+                        },
+                        new
+                        {
+                            CountryId = 33L,
+                            Code = "673",
+                            Name = "Brunei"
+                        },
+                        new
+                        {
+                            CountryId = 34L,
+                            Code = "359",
+                            Name = "Bulgaria"
+                        },
+                        new
+                        {
+                            CountryId = 35L,
+                            Code = "226",
+                            Name = "Burkina Faso"
+                        },
+                        new
+                        {
+                            CountryId = 36L,
+                            Code = "257",
+                            Name = "Burundi"
+                        },
+                        new
+                        {
+                            CountryId = 37L,
+                            Code = "238",
+                            Name = "Cabo Verde"
+                        },
+                        new
+                        {
+                            CountryId = 38L,
+                            Code = "855",
+                            Name = "Cambodia"
+                        },
+                        new
+                        {
+                            CountryId = 39L,
+                            Code = "237",
+                            Name = "Cameroon"
+                        },
+                        new
+                        {
+                            CountryId = 40L,
+                            Code = "1",
+                            Name = "Canada"
+                        },
+                        new
+                        {
+                            CountryId = 41L,
+                            Code = "0",
+                            Name = "Caribbean"
+                        },
+                        new
+                        {
+                            CountryId = 42L,
+                            Code = "1",
+                            Name = "Cayman Islands"
+                        },
+                        new
+                        {
+                            CountryId = 43L,
+                            Code = "236",
+                            Name = "Central African Republic"
+                        },
+                        new
+                        {
+                            CountryId = 44L,
+                            Code = "235",
+                            Name = "Chad"
+                        },
+                        new
+                        {
+                            CountryId = 45L,
+                            Code = "56",
+                            Name = "Chile"
+                        },
+                        new
+                        {
+                            CountryId = 46L,
+                            Code = "86",
+                            Name = "China"
+                        },
+                        new
+                        {
+                            CountryId = 47L,
+                            Code = "61",
+                            Name = "Christmas Island"
+                        },
+                        new
+                        {
+                            CountryId = 48L,
+                            Code = "61",
+                            Name = "Cocos (Keeling) Islands"
+                        },
+                        new
+                        {
+                            CountryId = 49L,
+                            Code = "57",
+                            Name = "Colombia"
+                        },
+                        new
+                        {
+                            CountryId = 50L,
+                            Code = "269",
+                            Name = "Comoros"
+                        },
+                        new
+                        {
+                            CountryId = 51L,
+                            Code = "242",
+                            Name = "Congo"
+                        },
+                        new
+                        {
+                            CountryId = 52L,
+                            Code = "243",
+                            Name = "Congo (DRC)"
+                        },
+                        new
+                        {
+                            CountryId = 53L,
+                            Code = "682",
+                            Name = "Cook Islands"
+                        },
+                        new
+                        {
+                            CountryId = 54L,
+                            Code = "506",
+                            Name = "Costa Rica"
+                        },
+                        new
+                        {
+                            CountryId = 55L,
+                            Code = "225",
+                            Name = "Côte d’Ivoire"
+                        },
+                        new
+                        {
+                            CountryId = 56L,
+                            Code = "385",
+                            Name = "Croatia"
+                        },
+                        new
+                        {
+                            CountryId = 57L,
+                            Code = "53",
+                            Name = "Cuba"
+                        },
+                        new
+                        {
+                            CountryId = 58L,
+                            Code = "599",
+                            Name = "Curaçao"
+                        },
+                        new
+                        {
+                            CountryId = 59L,
+                            Code = "357",
+                            Name = "Cyprus"
+                        },
+                        new
+                        {
+                            CountryId = 60L,
+                            Code = "420",
+                            Name = "Czechia"
+                        },
+                        new
+                        {
+                            CountryId = 61L,
+                            Code = "45",
+                            Name = "Denmark"
+                        },
+                        new
+                        {
+                            CountryId = 62L,
+                            Code = "253",
+                            Name = "Djibouti"
+                        },
+                        new
+                        {
+                            CountryId = 63L,
+                            Code = "1",
+                            Name = "Dominica"
+                        },
+                        new
+                        {
+                            CountryId = 64L,
+                            Code = "1",
+                            Name = "Dominican Republic"
+                        },
+                        new
+                        {
+                            CountryId = 65L,
+                            Code = "593",
+                            Name = "Ecuador"
+                        },
+                        new
+                        {
+                            CountryId = 66L,
+                            Code = "20",
+                            Name = "Egypt"
+                        },
+                        new
+                        {
+                            CountryId = 67L,
+                            Code = "503",
+                            Name = "El Salvador"
+                        },
+                        new
+                        {
+                            CountryId = 68L,
+                            Code = "240",
+                            Name = "Equatorial Guinea"
+                        },
+                        new
+                        {
+                            CountryId = 69L,
+                            Code = "291",
+                            Name = "Eritrea"
+                        },
+                        new
+                        {
+                            CountryId = 70L,
+                            Code = "372",
+                            Name = "Estonia"
+                        },
+                        new
+                        {
+                            CountryId = 71L,
+                            Code = "251",
+                            Name = "Ethiopia"
+                        },
+                        new
+                        {
+                            CountryId = 72L,
+                            Code = "0",
+                            Name = "Europe"
+                        },
+                        new
+                        {
+                            CountryId = 73L,
+                            Code = "500",
+                            Name = "Falkland Islands"
+                        },
+                        new
+                        {
+                            CountryId = 74L,
+                            Code = "298",
+                            Name = "Faroe Islands"
+                        },
+                        new
+                        {
+                            CountryId = 75L,
+                            Code = "679",
+                            Name = "Fiji"
+                        },
+                        new
+                        {
+                            CountryId = 76L,
+                            Code = "358",
+                            Name = "Finland"
+                        },
+                        new
+                        {
+                            CountryId = 77L,
+                            Code = "33",
+                            Name = "France"
+                        },
+                        new
+                        {
+                            CountryId = 78L,
+                            Code = "594",
+                            Name = "French Guiana"
+                        },
+                        new
+                        {
+                            CountryId = 79L,
+                            Code = "689",
+                            Name = "French Polynesia"
+                        },
+                        new
+                        {
+                            CountryId = 80L,
+                            Code = "241",
+                            Name = "Gabon"
+                        },
+                        new
+                        {
+                            CountryId = 81L,
+                            Code = "220",
+                            Name = "Gambia"
+                        },
+                        new
+                        {
+                            CountryId = 82L,
+                            Code = "995",
+                            Name = "Georgia"
+                        },
+                        new
+                        {
+                            CountryId = 83L,
+                            Code = "49",
+                            Name = "Germany"
+                        },
+                        new
+                        {
+                            CountryId = 84L,
+                            Code = "233",
+                            Name = "Ghana"
+                        },
+                        new
+                        {
+                            CountryId = 85L,
+                            Code = "350",
+                            Name = "Gibraltar"
+                        },
+                        new
+                        {
+                            CountryId = 86L,
+                            Code = "30",
+                            Name = "Greece"
+                        },
+                        new
+                        {
+                            CountryId = 87L,
+                            Code = "299",
+                            Name = "Greenland"
+                        },
+                        new
+                        {
+                            CountryId = 88L,
+                            Code = "1",
+                            Name = "Grenada"
+                        },
+                        new
+                        {
+                            CountryId = 89L,
+                            Code = "590",
+                            Name = "Guadeloupe"
+                        },
+                        new
+                        {
+                            CountryId = 90L,
+                            Code = "1",
+                            Name = "Guam"
+                        },
+                        new
+                        {
+                            CountryId = 91L,
+                            Code = "502",
+                            Name = "Guatemala"
+                        },
+                        new
+                        {
+                            CountryId = 92L,
+                            Code = "44",
+                            Name = "Guernsey"
+                        },
+                        new
+                        {
+                            CountryId = 93L,
+                            Code = "224",
+                            Name = "Guinea"
+                        },
+                        new
+                        {
+                            CountryId = 94L,
+                            Code = "245",
+                            Name = "Guinea-Bissau"
+                        },
+                        new
+                        {
+                            CountryId = 95L,
+                            Code = "592",
+                            Name = "Guyana"
+                        },
+                        new
+                        {
+                            CountryId = 96L,
+                            Code = "509",
+                            Name = "Haiti"
+                        },
+                        new
+                        {
+                            CountryId = 97L,
+                            Code = "504",
+                            Name = "Honduras"
+                        },
+                        new
+                        {
+                            CountryId = 98L,
+                            Code = "852",
+                            Name = "Hong Kong SAR"
+                        },
+                        new
+                        {
+                            CountryId = 99L,
+                            Code = "36",
+                            Name = "Hungary"
+                        },
+                        new
+                        {
+                            CountryId = 100L,
+                            Code = "354",
+                            Name = "Iceland"
+                        },
+                        new
+                        {
+                            CountryId = 101L,
+                            Code = "91",
+                            Name = "India"
+                        },
+                        new
+                        {
+                            CountryId = 102L,
+                            Code = "62",
+                            Name = "Indonesia"
+                        },
+                        new
+                        {
+                            CountryId = 103L,
+                            Code = "98",
+                            Name = "Iran"
+                        },
+                        new
+                        {
+                            CountryId = 104L,
+                            Code = "964",
+                            Name = "Iraq"
+                        },
+                        new
+                        {
+                            CountryId = 105L,
+                            Code = "353",
+                            Name = "Ireland"
+                        },
+                        new
+                        {
+                            CountryId = 106L,
+                            Code = "44",
+                            Name = "Isle of Man"
+                        },
+                        new
+                        {
+                            CountryId = 107L,
+                            Code = "972",
+                            Name = "Israel"
+                        },
+                        new
+                        {
+                            CountryId = 108L,
+                            Code = "39",
+                            Name = "Italy"
+                        },
+                        new
+                        {
+                            CountryId = 109L,
+                            Code = "1",
+                            Name = "Jamaica"
+                        },
+                        new
+                        {
+                            CountryId = 110L,
+                            Code = "81",
+                            Name = "Japan"
+                        },
+                        new
+                        {
+                            CountryId = 111L,
+                            Code = "44",
+                            Name = "Jersey"
+                        },
+                        new
+                        {
+                            CountryId = 112L,
+                            Code = "962",
+                            Name = "Jordan"
+                        },
+                        new
+                        {
+                            CountryId = 113L,
+                            Code = "7",
+                            Name = "Kazakhstan"
+                        },
+                        new
+                        {
+                            CountryId = 114L,
+                            Code = "254",
+                            Name = "Kenya"
+                        },
+                        new
+                        {
+                            CountryId = 115L,
+                            Code = "686",
+                            Name = "Kiribati"
+                        },
+                        new
+                        {
+                            CountryId = 116L,
+                            Code = "82",
+                            Name = "Korea"
+                        },
+                        new
+                        {
+                            CountryId = 117L,
+                            Code = "383",
+                            Name = "Kosovo"
+                        },
+                        new
+                        {
+                            CountryId = 118L,
+                            Code = "965",
+                            Name = "Kuwait"
+                        },
+                        new
+                        {
+                            CountryId = 119L,
+                            Code = "996",
+                            Name = "Kyrgyzstan"
+                        },
+                        new
+                        {
+                            CountryId = 120L,
+                            Code = "856",
+                            Name = "Laos"
+                        },
+                        new
+                        {
+                            CountryId = 121L,
+                            Code = "0",
+                            Name = "Latin America"
+                        },
+                        new
+                        {
+                            CountryId = 122L,
+                            Code = "371",
+                            Name = "Latvia"
+                        },
+                        new
+                        {
+                            CountryId = 123L,
+                            Code = "961",
+                            Name = "Lebanon"
+                        },
+                        new
+                        {
+                            CountryId = 124L,
+                            Code = "266",
+                            Name = "Lesotho"
+                        },
+                        new
+                        {
+                            CountryId = 125L,
+                            Code = "231",
+                            Name = "Liberia"
+                        },
+                        new
+                        {
+                            CountryId = 126L,
+                            Code = "218",
+                            Name = "Libya"
+                        },
+                        new
+                        {
+                            CountryId = 127L,
+                            Code = "423",
+                            Name = "Liechtenstein"
+                        },
+                        new
+                        {
+                            CountryId = 128L,
+                            Code = "370",
+                            Name = "Lithuania"
+                        },
+                        new
+                        {
+                            CountryId = 129L,
+                            Code = "352",
+                            Name = "Luxembourg"
+                        },
+                        new
+                        {
+                            CountryId = 130L,
+                            Code = "853",
+                            Name = "Macao SAR"
+                        },
+                        new
+                        {
+                            CountryId = 131L,
+                            Code = "389",
+                            Name = "Macedonia, FYRO"
+                        },
+                        new
+                        {
+                            CountryId = 132L,
+                            Code = "261",
+                            Name = "Madagascar"
+                        },
+                        new
+                        {
+                            CountryId = 133L,
+                            Code = "265",
+                            Name = "Malawi"
+                        },
+                        new
+                        {
+                            CountryId = 134L,
+                            Code = "60",
+                            Name = "Malaysia"
+                        },
+                        new
+                        {
+                            CountryId = 135L,
+                            Code = "960",
+                            Name = "Maldives"
+                        },
+                        new
+                        {
+                            CountryId = 136L,
+                            Code = "223",
+                            Name = "Mali"
+                        },
+                        new
+                        {
+                            CountryId = 137L,
+                            Code = "356",
+                            Name = "Malta"
+                        },
+                        new
+                        {
+                            CountryId = 138L,
+                            Code = "692",
+                            Name = "Marshall Islands"
+                        },
+                        new
+                        {
+                            CountryId = 139L,
+                            Code = "596",
+                            Name = "Martinique"
+                        },
+                        new
+                        {
+                            CountryId = 140L,
+                            Code = "222",
+                            Name = "Mauritania"
+                        },
+                        new
+                        {
+                            CountryId = 141L,
+                            Code = "230",
+                            Name = "Mauritius"
+                        },
+                        new
+                        {
+                            CountryId = 142L,
+                            Code = "262",
+                            Name = "Mayotte"
+                        },
+                        new
+                        {
+                            CountryId = 143L,
+                            Code = "52",
+                            Name = "Mexico"
+                        },
+                        new
+                        {
+                            CountryId = 144L,
+                            Code = "691",
+                            Name = "Micronesia"
+                        },
+                        new
+                        {
+                            CountryId = 145L,
+                            Code = "373",
+                            Name = "Moldova"
+                        },
+                        new
+                        {
+                            CountryId = 146L,
+                            Code = "377",
+                            Name = "Monaco"
+                        },
+                        new
+                        {
+                            CountryId = 147L,
+                            Code = "976",
+                            Name = "Mongolia"
+                        },
+                        new
+                        {
+                            CountryId = 148L,
+                            Code = "382",
+                            Name = "Montenegro"
+                        },
+                        new
+                        {
+                            CountryId = 149L,
+                            Code = "1",
+                            Name = "Montserrat"
+                        },
+                        new
+                        {
+                            CountryId = 150L,
+                            Code = "212",
+                            Name = "Morocco"
+                        },
+                        new
+                        {
+                            CountryId = 151L,
+                            Code = "258",
+                            Name = "Mozambique"
+                        },
+                        new
+                        {
+                            CountryId = 152L,
+                            Code = "95",
+                            Name = "Myanmar"
+                        },
+                        new
+                        {
+                            CountryId = 153L,
+                            Code = "264",
+                            Name = "Namibia"
+                        },
+                        new
+                        {
+                            CountryId = 154L,
+                            Code = "674",
+                            Name = "Nauru"
+                        },
+                        new
+                        {
+                            CountryId = 155L,
+                            Code = "977",
+                            Name = "Nepal"
+                        },
+                        new
+                        {
+                            CountryId = 156L,
+                            Code = "31",
+                            Name = "Netherlands"
+                        },
+                        new
+                        {
+                            CountryId = 157L,
+                            Code = "687",
+                            Name = "New Caledonia"
+                        },
+                        new
+                        {
+                            CountryId = 158L,
+                            Code = "64",
+                            Name = "New Zealand"
+                        },
+                        new
+                        {
+                            CountryId = 159L,
+                            Code = "505",
+                            Name = "Nicaragua"
+                        },
+                        new
+                        {
+                            CountryId = 160L,
+                            Code = "227",
+                            Name = "Niger"
+                        },
+                        new
+                        {
+                            CountryId = 161L,
+                            Code = "234",
+                            Name = "Nigeria"
+                        },
+                        new
+                        {
+                            CountryId = 162L,
+                            Code = "683",
+                            Name = "Niue"
+                        },
+                        new
+                        {
+                            CountryId = 163L,
+                            Code = "672",
+                            Name = "Norfolk Island"
+                        },
+                        new
+                        {
+                            CountryId = 164L,
+                            Code = "850",
+                            Name = "North Korea"
+                        },
+                        new
+                        {
+                            CountryId = 165L,
+                            Code = "1",
+                            Name = "Northern Mariana Islands"
+                        },
+                        new
+                        {
+                            CountryId = 166L,
+                            Code = "47",
+                            Name = "Norway"
+                        },
+                        new
+                        {
+                            CountryId = 167L,
+                            Code = "968",
+                            Name = "Oman"
+                        },
+                        new
+                        {
+                            CountryId = 168L,
+                            Code = "92",
+                            Name = "Pakistan"
+                        },
+                        new
+                        {
+                            CountryId = 169L,
+                            Code = "680",
+                            Name = "Palau"
+                        },
+                        new
+                        {
+                            CountryId = 170L,
+                            Code = "970",
+                            Name = "Palestinian Authority"
+                        },
+                        new
+                        {
+                            CountryId = 171L,
+                            Code = "507",
+                            Name = "Panama"
+                        },
+                        new
+                        {
+                            CountryId = 172L,
+                            Code = "675",
+                            Name = "Papua New Guinea"
+                        },
+                        new
+                        {
+                            CountryId = 173L,
+                            Code = "595",
+                            Name = "Paraguay"
+                        },
+                        new
+                        {
+                            CountryId = 174L,
+                            Code = "51",
+                            Name = "Peru"
+                        },
+                        new
+                        {
+                            CountryId = 175L,
+                            Code = "63",
+                            Name = "Philippines"
+                        },
+                        new
+                        {
+                            CountryId = 176L,
+                            Code = "0",
+                            Name = "Pitcairn Islands"
+                        },
+                        new
+                        {
+                            CountryId = 177L,
+                            Code = "48",
+                            Name = "Poland"
+                        },
+                        new
+                        {
+                            CountryId = 178L,
+                            Code = "351",
+                            Name = "Portugal"
+                        },
+                        new
+                        {
+                            CountryId = 179L,
+                            Code = "1",
+                            Name = "Puerto Rico"
+                        },
+                        new
+                        {
+                            CountryId = 180L,
+                            Code = "974",
+                            Name = "Qatar"
+                        },
+                        new
+                        {
+                            CountryId = 181L,
+                            Code = "262",
+                            Name = "Réunion"
+                        },
+                        new
+                        {
+                            CountryId = 182L,
+                            Code = "40",
+                            Name = "Romania"
+                        },
+                        new
+                        {
+                            CountryId = 183L,
+                            Code = "7",
+                            Name = "Russia"
+                        },
+                        new
+                        {
+                            CountryId = 184L,
+                            Code = "250",
+                            Name = "Rwanda"
+                        },
+                        new
+                        {
+                            CountryId = 185L,
+                            Code = "590",
+                            Name = "Saint Barthélemy"
+                        },
+                        new
+                        {
+                            CountryId = 186L,
+                            Code = "1",
+                            Name = "Saint Kitts and Nevis"
+                        },
+                        new
+                        {
+                            CountryId = 187L,
+                            Code = "1",
+                            Name = "Saint Lucia"
+                        },
+                        new
+                        {
+                            CountryId = 188L,
+                            Code = "590",
+                            Name = "Saint Martin"
+                        },
+                        new
+                        {
+                            CountryId = 189L,
+                            Code = "508",
+                            Name = "Saint Pierre and Miquelon"
+                        },
+                        new
+                        {
+                            CountryId = 190L,
+                            Code = "1",
+                            Name = "Saint Vincent and the Grenadines"
+                        },
+                        new
+                        {
+                            CountryId = 191L,
+                            Code = "685",
+                            Name = "Samoa"
+                        },
+                        new
+                        {
+                            CountryId = 192L,
+                            Code = "378",
+                            Name = "San Marino"
+                        },
+                        new
+                        {
+                            CountryId = 193L,
+                            Code = "239",
+                            Name = "São Tomé and Príncipe"
+                        },
+                        new
+                        {
+                            CountryId = 194L,
+                            Code = "966",
+                            Name = "Saudi Arabia"
+                        },
+                        new
+                        {
+                            CountryId = 195L,
+                            Code = "221",
+                            Name = "Senegal"
+                        },
+                        new
+                        {
+                            CountryId = 196L,
+                            Code = "381",
+                            Name = "Serbia"
+                        },
+                        new
+                        {
+                            CountryId = 197L,
+                            Code = "248",
+                            Name = "Seychelles"
+                        },
+                        new
+                        {
+                            CountryId = 198L,
+                            Code = "232",
+                            Name = "Sierra Leone"
+                        },
+                        new
+                        {
+                            CountryId = 199L,
+                            Code = "65",
+                            Name = "Singapore"
+                        },
+                        new
+                        {
+                            CountryId = 200L,
+                            Code = "1",
+                            Name = "Sint Maarten"
+                        },
+                        new
+                        {
+                            CountryId = 201L,
+                            Code = "421",
+                            Name = "Slovakia"
+                        },
+                        new
+                        {
+                            CountryId = 202L,
+                            Code = "386",
+                            Name = "Slovenia"
+                        },
+                        new
+                        {
+                            CountryId = 203L,
+                            Code = "677",
+                            Name = "Solomon Islands"
+                        },
+                        new
+                        {
+                            CountryId = 204L,
+                            Code = "252",
+                            Name = "Somalia"
+                        },
+                        new
+                        {
+                            CountryId = 205L,
+                            Code = "27",
+                            Name = "South Africa"
+                        },
+                        new
+                        {
+                            CountryId = 206L,
+                            Code = "211",
+                            Name = "South Sudan"
+                        },
+                        new
+                        {
+                            CountryId = 207L,
+                            Code = "34",
+                            Name = "Spain"
+                        },
+                        new
+                        {
+                            CountryId = 208L,
+                            Code = "94",
+                            Name = "Sri Lanka"
+                        },
+                        new
+                        {
+                            CountryId = 209L,
+                            Code = "290",
+                            Name = "St Helena, Ascension, Tristan da Cunha"
+                        },
+                        new
+                        {
+                            CountryId = 210L,
+                            Code = "249",
+                            Name = "Sudan"
+                        },
+                        new
+                        {
+                            CountryId = 211L,
+                            Code = "597",
+                            Name = "Suriname"
+                        },
+                        new
+                        {
+                            CountryId = 212L,
+                            Code = "47",
+                            Name = "Svalbard and Jan Mayen"
+                        },
+                        new
+                        {
+                            CountryId = 213L,
+                            Code = "268",
+                            Name = "Swaziland"
+                        },
+                        new
+                        {
+                            CountryId = 214L,
+                            Code = "46",
+                            Name = "Sweden"
+                        },
+                        new
+                        {
+                            CountryId = 215L,
+                            Code = "41",
+                            Name = "Switzerland"
+                        },
+                        new
+                        {
+                            CountryId = 216L,
+                            Code = "963",
+                            Name = "Syria"
+                        },
+                        new
+                        {
+                            CountryId = 217L,
+                            Code = "886",
+                            Name = "Taiwan"
+                        },
+                        new
+                        {
+                            CountryId = 218L,
+                            Code = "992",
+                            Name = "Tajikistan"
+                        },
+                        new
+                        {
+                            CountryId = 219L,
+                            Code = "255",
+                            Name = "Tanzania"
+                        },
+                        new
+                        {
+                            CountryId = 220L,
+                            Code = "66",
+                            Name = "Thailand"
+                        },
+                        new
+                        {
+                            CountryId = 221L,
+                            Code = "670",
+                            Name = "Timor-Leste"
+                        },
+                        new
+                        {
+                            CountryId = 222L,
+                            Code = "228",
+                            Name = "Togo"
+                        },
+                        new
+                        {
+                            CountryId = 223L,
+                            Code = "690",
+                            Name = "Tokelau"
+                        },
+                        new
+                        {
+                            CountryId = 224L,
+                            Code = "676",
+                            Name = "Tonga"
+                        },
+                        new
+                        {
+                            CountryId = 225L,
+                            Code = "1",
+                            Name = "Trinidad and Tobago"
+                        },
+                        new
+                        {
+                            CountryId = 226L,
+                            Code = "216",
+                            Name = "Tunisia"
+                        },
+                        new
+                        {
+                            CountryId = 227L,
+                            Code = "90",
+                            Name = "Turkey"
+                        },
+                        new
+                        {
+                            CountryId = 228L,
+                            Code = "993",
+                            Name = "Turkmenistan"
+                        },
+                        new
+                        {
+                            CountryId = 229L,
+                            Code = "1",
+                            Name = "Turks and Caicos Islands"
+                        },
+                        new
+                        {
+                            CountryId = 230L,
+                            Code = "688",
+                            Name = "Tuvalu"
+                        },
+                        new
+                        {
+                            CountryId = 231L,
+                            Code = "0",
+                            Name = "U.S. Outlying Islands"
+                        },
+                        new
+                        {
+                            CountryId = 232L,
+                            Code = "1",
+                            Name = "U.S. Virgin Islands"
+                        },
+                        new
+                        {
+                            CountryId = 233L,
+                            Code = "256",
+                            Name = "Uganda"
+                        },
+                        new
+                        {
+                            CountryId = 234L,
+                            Code = "380",
+                            Name = "Ukraine"
+                        },
+                        new
+                        {
+                            CountryId = 235L,
+                            Code = "971",
+                            Name = "United Arab Emirates"
+                        },
+                        new
+                        {
+                            CountryId = 236L,
+                            Code = "44",
+                            Name = "United Kingdom"
+                        },
+                        new
+                        {
+                            CountryId = 237L,
+                            Code = "1",
+                            Name = "United States"
+                        },
+                        new
+                        {
+                            CountryId = 238L,
+                            Code = "598",
+                            Name = "Uruguay"
+                        },
+                        new
+                        {
+                            CountryId = 239L,
+                            Code = "998",
+                            Name = "Uzbekistan"
+                        },
+                        new
+                        {
+                            CountryId = 240L,
+                            Code = "678",
+                            Name = "Vanuatu"
+                        },
+                        new
+                        {
+                            CountryId = 241L,
+                            Code = "39",
+                            Name = "Vatican City"
+                        },
+                        new
+                        {
+                            CountryId = 242L,
+                            Code = "58",
+                            Name = "Venezuela"
+                        },
+                        new
+                        {
+                            CountryId = 243L,
+                            Code = "84",
+                            Name = "Vietnam"
+                        },
+                        new
+                        {
+                            CountryId = 244L,
+                            Code = "681",
+                            Name = "Wallis and Futuna"
+                        },
+                        new
+                        {
+                            CountryId = 245L,
+                            Code = "0",
+                            Name = "World"
+                        },
+                        new
+                        {
+                            CountryId = 246L,
+                            Code = "967",
+                            Name = "Yemen"
+                        },
+                        new
+                        {
+                            CountryId = 247L,
+                            Code = "260",
+                            Name = "Zambia"
+                        },
+                        new
+                        {
+                            CountryId = 248L,
+                            Code = "263",
+                            Name = "Zimbabwe"
+                        });
+                });
+
+            modelBuilder.Entity("Raythos.Models.User", b =>
+                {
+                    b.Property<long>("UserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("UserId"));
 
                     b.Property<string>("ContactNo")
                         .IsRequired()
@@ -64,23 +1615,47 @@ namespace Raythos.Migrations
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("Id");
+                    b.HasKey("UserId");
 
                     b.ToTable("Users", (string)null);
 
                     b.HasData(
                         new
                         {
-                            Id = 1L,
+                            UserId = 1L,
                             ContactNo = "1234567890",
-                            CreatedAt = new DateTime(2023, 12, 6, 2, 9, 35, 109, DateTimeKind.Local).AddTicks(3107),
+                            CreatedAt = new DateTime(2023, 12, 6, 23, 1, 44, 741, DateTimeKind.Local).AddTicks(1323),
                             Email = "admin@system.com",
                             FName = "Admin",
                             IsAdmin = true,
                             LName = "System",
                             Password = "admin",
-                            UpdatedAt = new DateTime(2023, 12, 6, 2, 9, 35, 109, DateTimeKind.Local).AddTicks(3121)
+                            UpdatedAt = new DateTime(2023, 12, 6, 23, 1, 44, 741, DateTimeKind.Local).AddTicks(1337)
                         });
+                });
+
+            modelBuilder.Entity("Raythos.Models.Address", b =>
+                {
+                    b.HasOne("Raythos.Models.Country", "Country")
+                        .WithMany()
+                        .HasForeignKey("CountryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Raythos.Models.User", "User")
+                        .WithMany("Addresses")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Country");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Raythos.Models.User", b =>
+                {
+                    b.Navigation("Addresses");
                 });
 #pragma warning restore 612, 618
         }

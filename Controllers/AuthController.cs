@@ -54,6 +54,7 @@ namespace Raythos.Controllers
             var token = GenerateJwt(user, Configuration);
             var response = new LoginResponse
             {
+                UserID = user.UserId,
                 FName = user.FName,
                 LName = user.LName,
                 Email = user.Email,
