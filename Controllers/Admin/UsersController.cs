@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Raythos.Models;
+using Raythos.Responses;
 using System.Text.Json.Nodes;
 
 namespace Raythos.Controllers.Admin
@@ -22,7 +23,7 @@ namespace Raythos.Controllers.Admin
         [HttpGet]
         public async Task<ActionResult<IEnumerable<JsonObject>>> GetUsers([FromQuery] int page = 1)
         {
-            var take = 1;
+            var take = 15;
             var skip = (page - 1) * take;
 
             var user = await _context.Users
@@ -43,16 +44,17 @@ namespace Raythos.Controllers.Admin
                 .ToListAsync();
             int total = await _context.Users.CountAsync();
 
-            var response = new
-            {
-                data = user,
-                meta = new
+            PaginatedResponse response =
+                new()
                 {
-                    total,
-                    page,
-                    last_page = Math.Ceiling((double)total / take)
-                }
-            };
+                    Data = user,
+                    Meta = new Meta
+                    {
+                        Total = total,
+                        Page = page,
+                        LastPage = (int)Math.Ceiling((double)total / take)
+                    }
+                };
 
             return Ok(response);
         }
@@ -72,15 +74,26 @@ namespace Raythos.Controllers.Admin
         }
 
         // PUT: api/dashboard/admin/user/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(long id, User user)
+        public async Task<ActionResult<User>> PutUser(long id, [FromForm] User user)
         {
             if (id != user.UserId)
             {
                 return BadRequest();
             }
 
+            //CHECK EMAIL ALREADY EXISTS
+            if (_context.Users.Any(u => u.UserId != user.UserId && u.Email == user.Email))
+            {
+                ModelState.AddModelError("Email", "Email already in use");
+                return BadRequest(ModelState);
+            }
+
+            if (user.Password != null)
+            {
+                user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
+            }
+            user.UpdatedAt = DateTime.Now;
             _context.Entry(user).State = EntityState.Modified;
 
             try
@@ -99,14 +112,26 @@ namespace Raythos.Controllers.Admin
                 }
             }
 
-            return NoContent();
+            return user;
         }
 
         // POST: api/dashboard/admin/user
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<User>> PostUser(User user)
+        public async Task<ActionResult<User>> PostUser([FromForm] User user)
         {
+            //CHECK IF USER ALREADY EXISTS
+            if (user.Email != null)
+            {
+                var isUserExits = _context.Users.FirstOrDefault(u => u.Email == user.Email);
+                if (isUserExits != null)
+                {
+                    return BadRequest("User already exists");
+                }
+            }
+
+            user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
+            user.CreatedAt = DateTime.Now;
+            user.UpdatedAt = DateTime.Now;
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
@@ -126,7 +151,7 @@ namespace Raythos.Controllers.Admin
             _context.Users.Remove(user);
             await _context.SaveChangesAsync();
 
-            return NoContent();
+            return Ok("User Has Deleted");
         }
 
         private bool UserExists(long id)

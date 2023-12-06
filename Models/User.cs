@@ -30,6 +30,6 @@ namespace Raythos.Models
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
 
-        public ICollection<Address> Addresses { get; } = new List<Address>();
+        public ICollection<Address>? Addresses { get; } = new List<Address>();
     }
 }
