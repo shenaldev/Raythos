@@ -1624,13 +1624,13 @@ namespace Raythos.Migrations
                         {
                             UserId = 1L,
                             ContactNo = "1234567890",
-                            CreatedAt = new DateTime(2023, 12, 6, 23, 1, 44, 741, DateTimeKind.Local).AddTicks(1323),
+                            CreatedAt = new DateTime(2023, 12, 24, 2, 47, 30, 695, DateTimeKind.Local).AddTicks(132),
                             Email = "admin@system.com",
                             FName = "Admin",
                             IsAdmin = true,
                             LName = "System",
-                            Password = "admin",
-                            UpdatedAt = new DateTime(2023, 12, 6, 23, 1, 44, 741, DateTimeKind.Local).AddTicks(1337)
+                            Password = "$2a$11$HM.MoWIEvfsVVs5j426F3ODINMo16xnOmrxAC2G80J28tz83SspNC",
+                            UpdatedAt = new DateTime(2023, 12, 24, 2, 47, 30, 695, DateTimeKind.Local).AddTicks(153)
                         });
                 });
 

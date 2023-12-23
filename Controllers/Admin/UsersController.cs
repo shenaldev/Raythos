@@ -75,26 +75,20 @@ namespace Raythos.Controllers.Admin
 
         // PUT: api/dashboard/admin/user/5
         [HttpPut("{id}")]
-        public async Task<ActionResult<User>> PutUser(long id, [FromForm] User user)
+        public async Task<ActionResult> PutUser(long id, [FromForm] UserUpdate user)
         {
             if (id != user.UserId)
             {
                 return BadRequest();
             }
 
-            //CHECK EMAIL ALREADY EXISTS
-            if (_context.Users.Any(u => u.UserId != user.UserId && u.Email == user.Email))
-            {
-                ModelState.AddModelError("Email", "Email already in use");
-                return BadRequest(ModelState);
-            }
+            User currentUser = await _context.Users.FindAsync(id);
+            currentUser.FName = user.FName;
+            currentUser.LName = user.LName;
+            currentUser.ContactNo = user.ContactNo;
+            currentUser.UpdatedAt = DateTime.Now;
 
-            if (user.Password != null)
-            {
-                user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
-            }
-            user.UpdatedAt = DateTime.Now;
-            _context.Entry(user).State = EntityState.Modified;
+            _context.Entry(currentUser).State = EntityState.Modified;
 
             try
             {
@@ -112,7 +106,7 @@ namespace Raythos.Controllers.Admin
                 }
             }
 
-            return user;
+            return NoContent();
         }
 
         // POST: api/dashboard/admin/user

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Raythos.Models;
 using Raythos.Responses;
@@ -10,6 +11,7 @@ namespace Raythos.Controllers
 {
     [Route("api/auth")]
     [ApiController]
+    [Authorize]
     public class AuthController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
@@ -23,6 +25,7 @@ namespace Raythos.Controllers
 
         // POST: api/auth/login
         [HttpPost("login")]
+        [AllowAnonymous]
         public IActionResult Login([FromForm] string email, [FromForm] string password)
         {
             if (email == null || password == null)
@@ -66,6 +69,7 @@ namespace Raythos.Controllers
 
         //POST: api/auth/register
         [HttpPost("register")]
+        [AllowAnonymous]
         public IActionResult Register([FromForm] User user)
         {
             if (user == null)

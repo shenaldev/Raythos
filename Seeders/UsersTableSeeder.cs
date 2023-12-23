@@ -16,7 +16,7 @@ namespace Raythos.Seeders
                     FName = "Admin",
                     LName = "System",
                     Email = "admin@system.com",
-                    Password = "admin",
+                    Password = BCrypt.Net.BCrypt.HashPassword("password"),
                     ContactNo = "1234567890",
                     IsAdmin = true,
                     CreatedAt = DateTime.Now,
