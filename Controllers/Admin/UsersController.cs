@@ -12,17 +12,11 @@ namespace Raythos.Controllers.Admin
     [Authorize(Roles = "Admin")]
     public class UsersController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
         private readonly IUserInterface _userRepository;
         private readonly IMapper _mapper;
 
-        public UsersController(
-            ApplicationDbContext context,
-            IUserInterface userRepository,
-            IMapper mapper
-        )
+        public UsersController(IUserInterface userRepository, IMapper mapper)
         {
-            _context = context;
             _userRepository = userRepository;
             _mapper = mapper;
         }
@@ -33,7 +27,7 @@ namespace Raythos.Controllers.Admin
         {
             var take = 15;
             var skip = (page - 1) * take;
-            int current_page = (int)Math.Ceiling((double)_context.Users.Count() / take);
+            int current_page = (int)Math.Ceiling((double)_userRepository.GetTotalUsers() / take);
 
             var users = _mapper.Map<List<UserDto>>(_userRepository.GetUsers(skip, take));
             var response = new UserDtoPaginated(
@@ -113,14 +107,7 @@ namespace Raythos.Controllers.Admin
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(long id)
         {
-            var user = await _context.Users.FindAsync(id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            _context.Users.Remove(user);
-            await _context.SaveChangesAsync();
+            //TODO: IMPLEMENT LOGIC
 
             return Ok("User Has Deleted");
         }
