@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using Raythos.DTOs;
+using Raythos.Interfaces;
 using Raythos.Models;
-using Raythos.Responses;
-using System.Text.Json.Nodes;
 
 namespace Raythos.Controllers.Admin
 {
@@ -13,57 +13,44 @@ namespace Raythos.Controllers.Admin
     public class UsersController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly IUserInterface _userRepository;
+        private readonly IMapper _mapper;
 
-        public UsersController(ApplicationDbContext context)
+        public UsersController(
+            ApplicationDbContext context,
+            IUserInterface userRepository,
+            IMapper mapper
+        )
         {
             _context = context;
+            _userRepository = userRepository;
+            _mapper = mapper;
         }
 
         // GET: api/dashboard/admin/user
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<JsonObject>>> GetUsers([FromQuery] int page = 1)
+        public ActionResult<IEnumerable<UserDtoPaginated>> GetUsers([FromQuery] int page = 1)
         {
             var take = 15;
             var skip = (page - 1) * take;
+            int current_page = (int)Math.Ceiling((double)_context.Users.Count() / take);
 
-            var user = await _context.Users
-                .Select(
-                    u =>
-                        new
-                        {
-                            u.Id,
-                            u.FName,
-                            u.LName,
-                            u.Email,
-                            u.ContactNo,
-                            u.CreatedAt
-                        }
-                )
-                .Skip(skip)
-                .Take(take)
-                .ToListAsync();
-            int total = await _context.Users.CountAsync();
-
-            PaginatedResponse response =
-                new()
-                {
-                    Data = user,
-                    Meta = new Meta
-                    {
-                        Total = total,
-                        Page = page,
-                        LastPage = (int)Math.Ceiling((double)total / take)
-                    }
-                };
+            var users = _mapper.Map<List<UserDto>>(_userRepository.GetUsers(skip, take));
+            var response = new UserDtoPaginated(
+                users,
+                _userRepository.GetTotalUsers(),
+                page,
+                current_page
+            );
 
             return Ok(response);
         }
 
         // GET: api/dashboard/admin/user/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUser(long id)
+        public ActionResult<UserDto> GetUser(long id)
         {
-            var user = await _context.Users.FindAsync(id);
+            var user = _mapper.Map<UserDto>(_userRepository.GetUser(id));
 
             if (user == null)
             {
@@ -75,35 +62,27 @@ namespace Raythos.Controllers.Admin
 
         // PUT: api/dashboard/admin/user/5
         [HttpPut("{id}")]
-        public async Task<ActionResult> PutUser(long id, [FromForm] User user)
+        public IActionResult PutUser(long id, [FromForm] UpdateUserDto user)
         {
             if (id != user.Id)
             {
-                return BadRequest();
+                return BadRequest("Invalid User ID");
             }
 
-            User currentUser = await _context.Users.FindAsync(id);
-            currentUser.FName = user.FName;
-            currentUser.LName = user.LName;
-            currentUser.ContactNo = user.ContactNo;
-            currentUser.UpdatedAt = DateTime.Now;
-
-            _context.Entry(currentUser).State = EntityState.Modified;
-
-            try
+            if (!_userRepository.IsUserExists(id))
             {
-                await _context.SaveChangesAsync();
+                return NotFound();
             }
-            catch (DbUpdateConcurrencyException)
+
+            if (!ModelState.IsValid)
             {
-                if (!UserExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return BadRequest(ModelState);
+            }
+
+            var isUpdated = _userRepository.UpdateUser(id, user);
+            if (!isUpdated)
+            {
+                return BadRequest("User not updated");
             }
 
             return NoContent();
@@ -111,25 +90,23 @@ namespace Raythos.Controllers.Admin
 
         // POST: api/dashboard/admin/user
         [HttpPost]
-        public async Task<ActionResult<User>> PostUser([FromForm] User user)
+        public ActionResult<UserDto> PostUser([FromForm] User user)
         {
             //CHECK IF USER ALREADY EXISTS
-            if (user.Email != null)
+            if (_userRepository.IsUserExists(user.Email))
             {
-                var isUserExits = _context.Users.FirstOrDefault(u => u.Email == user.Email);
-                if (isUserExits != null)
-                {
-                    return BadRequest("User already exists");
-                }
+                return BadRequest("User email already exists");
             }
 
-            user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
-            user.CreatedAt = DateTime.Now;
-            user.UpdatedAt = DateTime.Now;
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
+            User createdUser = _userRepository.CreateUser(user);
 
-            return CreatedAtAction("GetUser", new { id = user.Id }, user);
+            if (createdUser != null)
+            {
+                var userData = CreatedAtAction("GetUser", new { id = user.Id }, user);
+                return userData;
+            }
+
+            return BadRequest(500);
         }
 
         // DELETE: api/dashboard/admin/user/5
@@ -146,11 +123,6 @@ namespace Raythos.Controllers.Admin
             await _context.SaveChangesAsync();
 
             return Ok("User Has Deleted");
-        }
-
-        private bool UserExists(long id)
-        {
-            return _context.Users.Any(e => e.Id == id);
         }
     }
 }

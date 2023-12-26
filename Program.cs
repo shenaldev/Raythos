@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Raythos;
+using Raythos.Interfaces;
+using Raythos.Repositories;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,8 +11,11 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Services.AddAutoMapper(typeof(Program));
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+//Add Repositories
+builder.Services.AddScoped<IUserInterface, UserRepository>();
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
