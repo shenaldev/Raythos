@@ -5,7 +5,7 @@ namespace Raythos.Models
     public class Country
     {
         [Key]
-        public long CountryId { get; set; }
+        public long Id { get; set; }
 
         [Required]
         [StringLength(50)]
@@ -14,5 +14,7 @@ namespace Raythos.Models
         [Required]
         [StringLength(3)]
         public required string Code { get; set; }
+
+        public ICollection<Address> Addresses { get; } = new List<Address>();
     }
 }

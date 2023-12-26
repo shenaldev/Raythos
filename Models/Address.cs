@@ -6,7 +6,7 @@ namespace Raythos.Models
     public class Address
     {
         [Key]
-        public Int64 AddressID { get; set; }
+        public long AddressID { get; set; }
 
         [Required]
         [StringLength(100)]
@@ -23,11 +23,12 @@ namespace Raythos.Models
         [Required]
         [ForeignKey("Country")]
         public long CountryId { get; set; }
-        public required Country Country { get; set; }
 
         [Required]
         [ForeignKey("User")]
         public long UserId { get; set; }
-        public required User User { get; set; }
+
+        public User User { get; set; } = null!;
+        public Country Country { get; set; } = null!;
     }
 }

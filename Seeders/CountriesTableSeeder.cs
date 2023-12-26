@@ -266,7 +266,7 @@ namespace Raythos.Seeders
                     (country, index) =>
                         new Country
                         {
-                            CountryId = index + 1,
+                            Id = index + 1,
                             Name = country.Key,
                             Code = country.Value
                         }

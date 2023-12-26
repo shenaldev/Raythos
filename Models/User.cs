@@ -5,7 +5,7 @@ namespace Raythos.Models
     public class User
     {
         [Key]
-        public Int64 UserId { get; set; }
+        public long Id { get; set; }
 
         [StringLength(150)]
         [Required]
@@ -30,6 +30,6 @@ namespace Raythos.Models
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
 
-        public ICollection<Address>? Addresses { get; } = new List<Address>();
+        public ICollection<Address> Addresses { get; } = new List<Address>();
     }
 }

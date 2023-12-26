@@ -31,7 +31,7 @@ namespace Raythos.Controllers.Admin
                     u =>
                         new
                         {
-                            u.UserId,
+                            u.Id,
                             u.FName,
                             u.LName,
                             u.Email,
@@ -75,9 +75,9 @@ namespace Raythos.Controllers.Admin
 
         // PUT: api/dashboard/admin/user/5
         [HttpPut("{id}")]
-        public async Task<ActionResult> PutUser(long id, [FromForm] UserUpdate user)
+        public async Task<ActionResult> PutUser(long id, [FromForm] User user)
         {
-            if (id != user.UserId)
+            if (id != user.Id)
             {
                 return BadRequest();
             }
@@ -129,7 +129,7 @@ namespace Raythos.Controllers.Admin
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetUser", new { id = user.UserId }, user);
+            return CreatedAtAction("GetUser", new { id = user.Id }, user);
         }
 
         // DELETE: api/dashboard/admin/user/5
@@ -150,7 +150,7 @@ namespace Raythos.Controllers.Admin
 
         private bool UserExists(long id)
         {
-            return _context.Users.Any(e => e.UserId == id);
+            return _context.Users.Any(e => e.Id == id);
         }
     }
 }

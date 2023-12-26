@@ -57,7 +57,7 @@ namespace Raythos.Controllers
             var token = GenerateJwt(user, Configuration);
             var response = new LoginResponse
             {
-                UserID = user.UserId,
+                UserID = user.Id,
                 FName = user.FName,
                 LName = user.LName,
                 Email = user.Email,
@@ -126,7 +126,7 @@ namespace Raythos.Controllers
                         new Claim(ClaimTypes.Role, user.IsAdmin ? "Admin" : "User")
                     }
                 ),
-                Expires = DateTime.Now.AddMinutes(1500),
+                Expires = DateTime.Now.AddMinutes(15000),
                 Issuer = issuer,
                 Audience = audience,
                 SigningCredentials = new SigningCredentials(

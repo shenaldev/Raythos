@@ -12,7 +12,7 @@ namespace Raythos.Seeders
             builder.HasData(
                 new User
                 {
-                    UserId = 1,
+                    Id = 1,
                     FName = "Admin",
                     LName = "System",
                     Email = "admin@system.com",
