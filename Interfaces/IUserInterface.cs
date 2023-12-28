@@ -13,6 +13,8 @@ namespace Raythos.Interfaces
 
         bool UpdateUser(long id, UpdateUserDto user);
 
+        bool DeleteUser(long id);
+
         bool IsUserExists(string email);
         bool IsUserExists(long id);
 

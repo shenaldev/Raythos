@@ -55,6 +55,20 @@ namespace Raythos.Repositories
             return saved > 0;
         }
 
+        //Delete User
+        public bool DeleteUser(long id)
+        {
+            User? userData = _context.Users.Where(u => u.Id == id).FirstOrDefault();
+            if (userData == null)
+            {
+                return false;
+            }
+
+            _context.Users.Remove(userData);
+            var saved = _context.SaveChanges();
+            return saved > 0;
+        }
+
         //Check If User Exists
         public bool IsUserExists(string email)
         {

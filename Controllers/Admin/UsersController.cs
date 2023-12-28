@@ -86,6 +86,11 @@ namespace Raythos.Controllers.Admin
         [HttpPost]
         public ActionResult<UserDto> PostUser([FromForm] User user)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             //CHECK IF USER ALREADY EXISTS
             if (_userRepository.IsUserExists(user.Email))
             {
@@ -105,9 +110,20 @@ namespace Raythos.Controllers.Admin
 
         // DELETE: api/dashboard/admin/user/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUser(long id)
+        public IActionResult DeleteUser(long id)
         {
-            //TODO: IMPLEMENT LOGIC
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            User user = _userRepository.GetUser(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            _userRepository.DeleteUser(id);
 
             return Ok("User Has Deleted");
         }
