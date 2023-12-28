@@ -25,6 +25,12 @@ namespace Raythos.Repositories
             return _context.Users.Where(u => u.Id == id).FirstOrDefault();
         }
 
+        //Get User By Email
+        public User GetUser(string email)
+        {
+            return _context.Users.Where(u => u.Email == email).FirstOrDefault();
+        }
+
         //Add New User
         public User CreateUser(User user)
         {

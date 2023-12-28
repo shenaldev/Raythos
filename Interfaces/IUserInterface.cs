@@ -9,6 +9,8 @@ namespace Raythos.Interfaces
 
         User GetUser(long id);
 
+        User GetUser(string email);
+
         User CreateUser(User user);
 
         bool UpdateUser(long id, UpdateUserDto user);
