@@ -1,0 +1,1169 @@
+{
+	"info": {
+		"_postman_id": "22f7e63e-4547-4118-b300-23d6d58aaa9b",
+		"name": "Raythos",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "18095080"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Login",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "email",
+									"value": "admin@system.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "password",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{API_URL}}/auth/login",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "FName",
+									"value": "Jane",
+									"type": "text"
+								},
+								{
+									"key": "LName",
+									"value": "Kome",
+									"type": "text"
+								},
+								{
+									"key": "Email",
+									"value": "look@mail.com",
+									"type": "text"
+								},
+								{
+									"key": "Password",
+									"value": "password",
+									"type": "text"
+								},
+								{
+									"key": "ContactNo",
+									"value": "0770565596",
+									"type": "text"
+								},
+								{
+									"key": "IsAdmin",
+									"value": "false",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{API_URL}}/auth/register",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Admin Dashbord",
+			"item": [
+				{
+					"name": "User",
+					"item": [
+						{
+							"name": "Get Users",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{API_URL}}/dashboard/admin/user?page=1",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"dashboard",
+										"admin",
+										"user"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add New User",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "FName",
+											"value": "Alenj",
+											"type": "text"
+										},
+										{
+											"key": "LName",
+											"value": "Look",
+											"type": "text"
+										},
+										{
+											"key": "Email",
+											"value": "alend@mail.com",
+											"type": "text"
+										},
+										{
+											"key": "Password",
+											"value": "password",
+											"type": "text"
+										},
+										{
+											"key": "ContactNo",
+											"value": "077456987",
+											"type": "text"
+										},
+										{
+											"key": "IsAdmin",
+											"value": "False",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{API_URL}}/dashboard/admin/user",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"dashboard",
+										"admin",
+										"user"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get User By ID",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{API_URL}}/dashboard/admin/user/12",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"dashboard",
+										"admin",
+										"user",
+										"12"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete User",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{API_URL}}/dashboard/admin/user/11",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"dashboard",
+										"admin",
+										"user",
+										"11"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update User",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "Id",
+											"value": "12",
+											"type": "text"
+										},
+										{
+											"key": "FName",
+											"value": "Ops",
+											"type": "text"
+										},
+										{
+											"key": "LName",
+											"value": "Nal",
+											"type": "text"
+										},
+										{
+											"key": "ContactNo",
+											"value": "077456987",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{API_URL}}/dashboard/admin/user/12",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"dashboard",
+										"admin",
+										"user",
+										"12"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Aircraft",
+					"item": [
+						{
+							"name": "Add Aircraft",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "Model",
+											"value": "AirBus",
+											"type": "text"
+										},
+										{
+											"key": "Image",
+											"value": "\"https://image.com\"",
+											"type": "text"
+										},
+										{
+											"key": "SerialNumber",
+											"value": "5698562",
+											"type": "text"
+										},
+										{
+											"key": "ManufacturedData",
+											"value": "2023-12-12",
+											"type": "text"
+										},
+										{
+											"key": "EngineType",
+											"value": "MXA45",
+											"type": "text"
+										},
+										{
+											"key": "MaxSpeed",
+											"value": "1200.00",
+											"type": "text"
+										},
+										{
+											"key": "FuelCapacity",
+											"value": "50.00",
+											"type": "text"
+										},
+										{
+											"key": "BasePrice",
+											"value": "12000",
+											"type": "text"
+										},
+										{
+											"key": "MaxPrice",
+											"value": "20000",
+											"type": "text"
+										},
+										{
+											"key": "Status",
+											"value": "pending",
+											"type": "text"
+										},
+										{
+											"key": "Description",
+											"value": "somthing gose here",
+											"type": "text"
+										},
+										{
+											"key": "TeamId",
+											"value": "1",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{API_URL}}/dashboard/admin/aircraft",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"dashboard",
+										"admin",
+										"aircraft"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Aircrafts",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{API_URL}}/dashboard/admin/aircraft",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"dashboard",
+										"admin",
+										"aircraft"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Aircraft By Id",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{API_URL}}/dashboard/admin/aircraft/3",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"dashboard",
+										"admin",
+										"aircraft",
+										"3"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Team",
+					"item": [
+						{
+							"name": "Members",
+							"item": [
+								{
+									"name": "Add Member To Team",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{_TOKEN}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "teamId",
+													"value": "1",
+													"type": "text"
+												},
+												{
+													"key": "userId",
+													"value": "5",
+													"type": "text"
+												}
+											]
+										},
+										"url": {
+											"raw": "{{API_URL}}/dashboard/admin/team/member/1",
+											"host": [
+												"{{API_URL}}"
+											],
+											"path": [
+												"dashboard",
+												"admin",
+												"team",
+												"member",
+												"1"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Delete Member From Team",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{_TOKEN}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{API_URL}}/dashboard/admin/team/member/1/5",
+											"host": [
+												"{{API_URL}}"
+											],
+											"path": [
+												"dashboard",
+												"admin",
+												"team",
+												"member",
+												"1",
+												"5"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Create New Team",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "Name",
+											"value": "Team 4",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{API_URL}}/dashboard/admin/team",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"dashboard",
+										"admin",
+										"team"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Teams",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{API_URL}}/dashboard/admin/team?page=1",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"dashboard",
+										"admin",
+										"team"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Team By Id",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{API_URL}}/dashboard/admin/team/1",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"dashboard",
+										"admin",
+										"team",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Team By ID",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "Id",
+											"value": "5",
+											"type": "text"
+										},
+										{
+											"key": "Name",
+											"value": "Team 3f",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{API_URL}}/dashboard/admin/team/5",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"dashboard",
+										"admin",
+										"team",
+										"5"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Team",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{API_URL}}/dashboard/admin/team/4",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"dashboard",
+										"admin",
+										"team",
+										"4"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "User Routes",
+			"item": [
+				{
+					"name": "User",
+					"item": [
+						{
+							"name": "Get User Details",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{API_URL}}/private/user",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"private",
+										"user"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update User",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "Id",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "FName",
+											"value": "Admin",
+											"type": "text"
+										},
+										{
+											"key": "LName",
+											"value": "System",
+											"type": "text"
+										},
+										{
+											"key": "ContactNo",
+											"value": "0770456987",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{API_URL}}/private/user",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"private",
+										"user"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Addresses",
+					"item": [
+						{
+							"name": "Add New Address",
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {
+									"accept": true
+								}
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "Street",
+											"value": "226",
+											"type": "text"
+										},
+										{
+											"key": "City",
+											"value": "Kandy",
+											"type": "text"
+										},
+										{
+											"key": "PostalCode",
+											"value": "1005",
+											"type": "text"
+										},
+										{
+											"key": "CountryId",
+											"value": "5",
+											"type": "text"
+										},
+										{
+											"key": "UserId",
+											"value": "1",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{API_URL}}/user/addresses",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"user",
+										"addresses"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Address",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{API_URL}}/user/addresses",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"user",
+										"addresses"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Address By Id",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{API_URL}}/user/addresses/10",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"user",
+										"addresses",
+										"10"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Address",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "AddressId",
+											"value": "10",
+											"type": "text"
+										},
+										{
+											"key": "Street",
+											"value": "225/3",
+											"type": "text"
+										},
+										{
+											"key": "City",
+											"value": "Kandy",
+											"type": "text"
+										},
+										{
+											"key": "PostalCode",
+											"value": "20072",
+											"type": "text"
+										},
+										{
+											"key": "CountryId",
+											"value": "20",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{API_URL}}/user/addresses/10",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"user",
+										"addresses",
+										"10"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Address",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{API_URL}}/user/addresses/10",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"user",
+										"addresses",
+										"10"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Public Routes",
+			"item": [
+				{
+					"name": "Country",
+					"item": [
+						{
+							"name": "Get Countires",
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {
+									"accept": true
+								}
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{API_URL}}/countries",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"countries"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Country By ID",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{API_URL}}/countries/5",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"countries",
+										"5"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "API_URL",
+			"value": "https://localhost:7115/api",
+			"type": "string"
+		},
+		{
+			"key": "_TOKEN",
+			"value": ""
+		}
+	]
+}
