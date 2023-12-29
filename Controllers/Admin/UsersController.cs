@@ -28,10 +28,11 @@ namespace Raythos.Controllers.Admin
         {
             var take = 15;
             var skip = (page - 1) * take;
-            int current_page = (int)Math.Ceiling((double)_userRepository.GetTotalUsers() / take);
+            int totalUsers = _userRepository.GetTotalUsers();
+            int lastPage = (int)Math.Ceiling((double)totalUsers / take);
 
             var users = _mapper.Map<List<UserDto>>(_userRepository.GetUsers(skip, take));
-            return PaginatedResponse<UserDto>.Paginate(users, page, current_page, take);
+            return PaginatedResponse<UserDto>.Paginate(users, totalUsers, page, lastPage);
         }
 
         // GET: api/dashboard/admin/user/5

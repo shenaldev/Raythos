@@ -12,6 +12,10 @@ namespace Raythos.Utils
             CreateMap<User, UpdateUserDto>();
             CreateMap<Address, AddressDto>();
             CreateMap<AddressDto, Address>();
+            CreateMap<Aircraft, AircraftDto>();
+            CreateMap<AircraftDto, Aircraft>();
+            CreateMap<Team, TeamDto>();
+            CreateMap<TeamDto, Team>();
         }
     }
 }
