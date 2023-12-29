@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Raythos.DTOs;
 using Raythos.Interfaces;
 using Raythos.Models;
+using Raythos.Responses;
 
 namespace Raythos.Controllers.Admin
 {
@@ -23,21 +24,14 @@ namespace Raythos.Controllers.Admin
 
         // GET: api/dashboard/admin/user
         [HttpGet]
-        public ActionResult<IEnumerable<UserDtoPaginated>> GetUsers([FromQuery] int page = 1)
+        public ActionResult<PaginatedResponse<UserDto>> GetUsers([FromQuery] int page = 1)
         {
             var take = 15;
             var skip = (page - 1) * take;
             int current_page = (int)Math.Ceiling((double)_userRepository.GetTotalUsers() / take);
 
             var users = _mapper.Map<List<UserDto>>(_userRepository.GetUsers(skip, take));
-            var response = new UserDtoPaginated(
-                users,
-                _userRepository.GetTotalUsers(),
-                page,
-                current_page
-            );
-
-            return Ok(response);
+            return PaginatedResponse<UserDto>.Paginate(users, page, current_page, take);
         }
 
         // GET: api/dashboard/admin/user/5

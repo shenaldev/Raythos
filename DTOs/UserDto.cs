@@ -11,20 +11,4 @@
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
     }
-
-    public class UserDtoPaginated
-    {
-        public ICollection<UserDto> Users { get; set; } = null!;
-        public int Total { get; set; }
-        public int Page { get; set; }
-        public int LastPage { get; set; }
-
-        public UserDtoPaginated(ICollection<UserDto> users, int total, int page, int lastPage)
-        {
-            Users = users;
-            Total = total;
-            Page = page;
-            LastPage = lastPage;
-        }
-    }
 }
