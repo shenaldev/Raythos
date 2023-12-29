@@ -91,5 +91,11 @@ namespace Raythos.Repositories
         {
             return _context.Users.Count();
         }
+
+        //Get User ID
+        public long GetUserID(string email)
+        {
+            return _context.Users.Where(u => u.Email == email).Select(u => u.Id).FirstOrDefault();
+        }
     }
 }

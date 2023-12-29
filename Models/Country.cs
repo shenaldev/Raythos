@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Raythos.Models
 {
@@ -15,6 +16,7 @@ namespace Raythos.Models
         [StringLength(3)]
         public required string Code { get; set; }
 
+        [JsonIgnore]
         public ICollection<Address> Addresses { get; } = new List<Address>();
     }
 }

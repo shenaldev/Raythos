@@ -1,43 +1,46 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using Raythos.DTOs;
+using Raythos.Interfaces;
 using Raythos.Models;
 using Raythos.Utils;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 
 namespace Raythos.Controllers.Private
 {
     [Route("api/user/addresses")]
     [ApiController]
-    [Authorize(Roles = "User")]
+    [Authorize]
     public class AddressesController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IAddressInterface _addressInterface;
+        private readonly IUserInterface _userInterface;
 
-        public AddressesController(ApplicationDbContext context)
+        public AddressesController(IAddressInterface addressInterface, IUserInterface userInterface)
         {
-            _context = context;
+            _addressInterface = addressInterface;
+            _userInterface = userInterface;
         }
 
         // GET: api/user/addresses
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Address>>> GetAddresses()
+        public ICollection<AddressDto>? GetAddresses()
         {
-            Int64 userId = await GetUserID();
-            if (userId != -1)
+            JWTHelper jWTHelper = new(_userInterface);
+            long userID = jWTHelper.GetUserID(User);
+
+            if (userID == -1)
             {
-                return await _context.Addresses.Where(a => a.UserId == userId).ToListAsync();
+                return null;
             }
 
-            return NotFound();
+            return _addressInterface.GetAddresses(userID);
         }
 
         // GET: api/user/addresses/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Address>> GetAddress(long id)
+        public ActionResult<Address>? GetAddress(long id)
         {
-            var address = await _context.Addresses.FindAsync(id);
+            Address address = _addressInterface.GetAddress(id);
 
             if (address == null)
             {
@@ -47,81 +50,95 @@ namespace Raythos.Controllers.Private
             return address;
         }
 
-        // PUT: api/user/addresses/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutAddress(long id, Address address)
+        // POST: api/user/addresses
+        [HttpPost]
+        public ActionResult<AddressDto>? PostAddress([FromForm] AddressDto address)
         {
-            if (id != address.AddressID)
+            if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
 
-            _context.Entry(address).State = EntityState.Modified;
-
-            try
+            if (address.CountryId == -1)
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!AddressExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                ModelState.AddModelError("CountryId", "CountryId is required");
+                return BadRequest(ModelState);
             }
 
-            return NoContent();
+            JWTHelper jWTHelper = new(_userInterface);
+            long userID = jWTHelper.GetUserID(User);
+            address.UserId = userID;
+            AddressDto newAddress = _addressInterface.CreateAddress(address);
+
+            if (newAddress == null)
+            {
+                return StatusCode(500);
+            }
+
+            return newAddress;
         }
 
-        // POST: api/user/addresses
-        [HttpPost]
-        public async Task<ActionResult<Address>> PostAddress([FromForm] Address address)
+        // PUT: api/user/addresses/5
+        [HttpPut("{id}")]
+        public IActionResult PutAddress(long id, [FromForm] AddressDto address)
         {
-            _context.Addresses.Add(address);
-            await _context.SaveChangesAsync();
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
 
-            return CreatedAtAction("GetAddress", new { id = address.AddressID }, address);
-        }
+            if (address.CountryId == -1)
+            {
+                ModelState.AddModelError("CountryId", "CountryId is required");
+                return BadRequest(ModelState);
+            }
 
-        // DELETE: api/user/addresses/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAddress(long id)
-        {
-            var address = await _context.Addresses.FindAsync(id);
-            if (address == null)
+            if (!_addressInterface.IsAddressExists(id))
             {
                 return NotFound();
             }
 
-            _context.Addresses.Remove(address);
-            await _context.SaveChangesAsync();
+            JWTHelper jWTHelper = new(_userInterface);
+            long userID = jWTHelper.GetUserID(User);
+
+            if (!_addressInterface.IsAddressBelongsToUser(id, userID))
+            {
+                return Unauthorized();
+            }
+
+            address.UserId = userID;
+
+            if (!_addressInterface.UpdateAddress(id, address))
+            {
+                return StatusCode(500);
+            }
 
             return NoContent();
         }
 
-        private bool AddressExists(long id)
+        // DELETE: api/user/addresses/5
+        [HttpDelete("{id}")]
+        public IActionResult DeleteAddress(long id)
         {
-            return _context.Addresses.Any(e => e.AddressID == id);
-        }
-
-        //GET USER ID FROM DB
-        private async Task<Int64> GetUserID()
-        {
-            string? userEmail = JWTHelper.GetEmailFromJWT(User);
-
-            if (userEmail != null)
+            if (!_addressInterface.IsAddressExists(id))
             {
-                Int64 userId = await _context.Users
-                    .Where(u => u.Email == userEmail)
-                    .Select(u => u.Id)
-                    .FirstOrDefaultAsync();
+                return NotFound();
             }
 
-            return -1;
+            JWTHelper jWTHelper = new(_userInterface);
+            long userID = jWTHelper.GetUserID(User);
+
+            if (!_addressInterface.IsAddressBelongsToUser(id, userID))
+            {
+                return Unauthorized();
+            }
+
+            if (!_addressInterface.DeleteAddress(id))
+            {
+                return StatusCode(500);
+            }
+
+            return NoContent();
         }
     }
 }

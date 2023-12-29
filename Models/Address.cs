@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace Raythos.Models
 {
@@ -29,6 +30,7 @@ namespace Raythos.Models
         public long UserId { get; set; }
 
         public User User { get; set; } = null!;
+
         public Country Country { get; set; } = null!;
     }
 }

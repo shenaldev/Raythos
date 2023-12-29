@@ -10,6 +10,8 @@ namespace Raythos.Utils
         {
             CreateMap<User, UserDto>();
             CreateMap<User, UpdateUserDto>();
+            CreateMap<Address, AddressDto>();
+            CreateMap<AddressDto, Address>();
         }
     }
 }

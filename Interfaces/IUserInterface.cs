@@ -18,8 +18,11 @@ namespace Raythos.Interfaces
         bool DeleteUser(long id);
 
         bool IsUserExists(string email);
+
         bool IsUserExists(long id);
 
         int GetTotalUsers();
+
+        long GetUserID(string email);
     }
 }
