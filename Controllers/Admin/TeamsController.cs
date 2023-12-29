@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Raythos.DTOs;
 using Raythos.Interfaces;
+using Raythos.Models;
 using Raythos.Responses;
 
 namespace Raythos.Controllers.Admin
@@ -45,7 +46,7 @@ namespace Raythos.Controllers.Admin
                 return NotFound();
             }
 
-            TeamDto team = _teamRepository.GetTeam(id);
+            TeamResponse team = _teamRepository.GetTeam(id);
             return Ok(team);
         }
 

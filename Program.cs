@@ -21,6 +21,7 @@ builder.Services.AddScoped<IUserInterface, UserRepository>();
 builder.Services.AddScoped<IAddressInterface, AddressRepository>();
 builder.Services.AddScoped<IAircraftInterface, AircraftRepository>();
 builder.Services.AddScoped<ITeamInterface, TeamRepository>();
+builder.Services.AddScoped<ITeamMemberInterface, TeamMemberRepository>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

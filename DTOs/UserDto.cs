@@ -1,4 +1,6 @@
-﻿namespace Raythos.DTOs
+﻿using System.Text.Json.Serialization;
+
+namespace Raythos.DTOs
 {
     public class UserDto
     {

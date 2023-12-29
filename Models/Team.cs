@@ -11,7 +11,7 @@ namespace Raythos.Models
         [StringLength(100)]
         public string Name { get; set; } = null!;
 
-        public DateTime? CreatedAt { get; set; }
+        public DateTime? CreatedAt { get; set; } = new DateTime();
         public DateTime? UpdatedAt { get; set; }
 
         public ICollection<TeamMember> TeamMembers { get; } = new List<TeamMember>();

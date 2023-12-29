@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Raythos.DTOs;
 using Raythos.Models;
+using Raythos.Responses;
 
 namespace Raythos.Utils
 {
@@ -16,6 +17,8 @@ namespace Raythos.Utils
             CreateMap<AircraftDto, Aircraft>();
             CreateMap<Team, TeamDto>();
             CreateMap<TeamDto, Team>();
+            CreateMap<TeamMember, TeamMemberDto>();
+            CreateMap<TeamMemberDto, TeamMember>();
         }
     }
 }

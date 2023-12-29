@@ -1,5 +1,5 @@
 ﻿using Raythos.DTOs;
-using Raythos.Models;
+using Raythos.Responses;
 
 namespace Raythos.Interfaces
 {
@@ -7,7 +7,7 @@ namespace Raythos.Interfaces
     {
         ICollection<TeamDto> GetTeams(int skip, int take = 15);
 
-        TeamDto GetTeam(long id);
+        TeamResponse GetTeam(long id);
 
         TeamDto CreateTeam(TeamDto team);
 
