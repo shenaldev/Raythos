@@ -4,7 +4,7 @@ namespace Raythos.Interfaces
 {
     public interface IAircraftInterface
     {
-        ICollection<AircraftDto> GetAircrafts();
+        ICollection<AircraftDto> GetAircrafts(int skip, int take = 15);
 
         AircraftDto GetAircraft(long id);
 
@@ -15,5 +15,7 @@ namespace Raythos.Interfaces
         bool DeleteAircraft(long id);
 
         bool IsAircraftExists(long id);
+
+        int GetTotalAircrafts();
     }
 }

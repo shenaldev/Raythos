@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Raythos.DTOs;
 using Raythos.Interfaces;
 using Raythos.Models;
@@ -16,14 +17,18 @@ namespace Raythos.Repositories
             _mapper = mapper;
         }
 
-        public ICollection<AircraftDto> GetAircrafts()
+        public ICollection<AircraftDto> GetAircrafts(int skip, int take = 15)
         {
-            throw new NotImplementedException();
+            return _mapper.Map<ICollection<AircraftDto>>(
+                _context.Aircrafts.Skip(skip).Take(take).OrderBy(a => a.Id).ToList()
+            );
         }
 
         public AircraftDto GetAircraft(long id)
         {
-            throw new NotImplementedException();
+            return _mapper.Map<AircraftDto>(
+                _context.Aircrafts.Where(a => a.Id == id).Include(a => a.Team).FirstOrDefault()
+            );
         }
 
         public AircraftDto CreateAircraft(AircraftDto aircraft)
@@ -31,9 +36,16 @@ namespace Raythos.Repositories
             try
             {
                 Aircraft newAircraft = _mapper.Map<Aircraft>(aircraft);
+                newAircraft.CreatedAt = DateTime.Now;
+                newAircraft.UpdatedAt = DateTime.Now;
+
                 _context.Aircrafts.Add(newAircraft);
-                _context.SaveChanges();
-                return aircraft;
+                int isSaved = _context.SaveChanges();
+                if (isSaved > 0)
+                {
+                    return _mapper.Map<AircraftDto>(newAircraft);
+                }
+                return null;
             }
             catch
             {
@@ -43,17 +55,45 @@ namespace Raythos.Repositories
 
         public bool UpdateAircraft(long id, AircraftDto aircraft)
         {
-            throw new NotImplementedException();
+            try
+            {
+                Aircraft updateAircraft = _mapper.Map<Aircraft>(aircraft);
+                updateAircraft.Id = id;
+                updateAircraft.UpdatedAt = DateTime.Now;
+
+                _context.Entry(updateAircraft).State = EntityState.Modified;
+                int isSaved = _context.SaveChanges();
+                return isSaved > 0;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         public bool DeleteAircraft(long id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                Aircraft aircraft = _context.Aircrafts.Find(id);
+                _context.Aircrafts.Remove(aircraft);
+                int isSaved = _context.SaveChanges();
+                return isSaved > 0;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         public bool IsAircraftExists(long id)
         {
-            throw new NotImplementedException();
+            return _context.Aircrafts.Any(a => a.Id == id);
+        }
+
+        public int GetTotalAircrafts()
+        {
+            return _context.Aircrafts.Count();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Raythos.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace Raythos.DTOs
 {
@@ -24,11 +25,13 @@ namespace Raythos.DTOs
         public decimal? MaxPrice { get; set; }
         public string Status { get; set; }
         public string Description { get; set; }
-        public string Slug { get; set; }
+        public string? Slug { get; set; } = "";
 
         [Required]
         public long? TeamId { get; set; }
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
+
+        public Team? Team { get; set; }
     }
 }

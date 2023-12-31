@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Raythos.Models
 {
@@ -16,6 +17,7 @@ namespace Raythos.Models
 
         public ICollection<TeamMember> TeamMembers { get; } = new List<TeamMember>();
 
+        [JsonIgnore]
         public Aircraft Aircraft { get; set; } = null!;
     }
 }
