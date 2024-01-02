@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace Raythos.Models
 {
@@ -55,9 +56,10 @@ namespace Raythos.Models
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
 
+        [JsonIgnore]
         public Team Team { get; set; } = null!;
 
-        public ICollection<AircraftCustomization> AircraftCustomizations { get; } =
-            new List<AircraftCustomization>();
+        [JsonIgnore]
+        public ICollection<AircraftOption> AircraftOptions { get; } = new List<AircraftOption>();
     }
 }

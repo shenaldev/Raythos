@@ -13,15 +13,8 @@ namespace Raythos.Models
         public decimal Total { get; set; }
 
         [Required]
-        public int Quantity { get; set; }
-
-        [Required]
         [StringLength(50)]
         public string Status { get; set; } = "Pending";
-
-        [Required]
-        [ForeignKey("Aircraft")]
-        public long AircraftId { get; set; }
 
         [ForeignKey("User")]
         public long? UserId { get; set; }
@@ -32,7 +25,6 @@ namespace Raythos.Models
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
 
-        public Aircraft Aircraft { get; set; } = null!;
         public User User { get; set; } = null!;
         public Address Address { get; set; } = null!;
     }

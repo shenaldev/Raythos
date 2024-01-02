@@ -13,10 +13,12 @@ namespace Raythos
         public DbSet<Country> Countries { get; set; }
         public DbSet<Address> Addresses { get; set; }
         public DbSet<Aircraft> Aircrafts { get; set; }
-        public DbSet<AircraftCustomization> AircraftCustomizations { get; set; }
+        public DbSet<AircraftOption> AircraftOptions { get; set; }
         public DbSet<Team> Teams { get; set; }
         public DbSet<TeamMember> TeamMembers { get; set; }
+        public DbSet<Cart> Carts { get; set; }
         public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<Payment> Payments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -31,13 +33,17 @@ namespace Raythos
 
             modelBuilder.Entity<Aircraft>().Property(a => a.Id).ValueGeneratedOnAdd();
 
-            modelBuilder.Entity<AircraftCustomization>().Property(a => a.Id).ValueGeneratedOnAdd();
+            modelBuilder.Entity<AircraftOption>().Property(a => a.Id).ValueGeneratedOnAdd();
 
             modelBuilder.Entity<Team>().Property(t => t.Id).ValueGeneratedOnAdd();
 
             modelBuilder.Entity<TeamMember>().HasKey(tm => new { tm.TeamId, tm.UserId });
 
+            modelBuilder.Entity<Cart>().Property(c => c.Id).ValueGeneratedOnAdd();
+
             modelBuilder.Entity<Order>().Property(o => o.Id).ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<OrderItem>().Property(oi => oi.Id).ValueGeneratedOnAdd();
 
             modelBuilder.Entity<Payment>().Property(p => p.Id).ValueGeneratedOnAdd();
         }
