@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Raythos.DTOs;
+using Raythos.DTOs.Aircrafts;
 using Raythos.Interfaces;
 using Raythos.Responses;
-using System.Globalization;
 
 namespace Raythos.Controllers.Admin
 {
@@ -13,10 +13,15 @@ namespace Raythos.Controllers.Admin
     public class AircraftsController : ControllerBase
     {
         private readonly IAircraftInterface _aircraftRepository;
+        private readonly IAircraftOptionInterface _aircraftOptionsRepository;
 
-        public AircraftsController(IAircraftInterface aircraftRepository)
+        public AircraftsController(
+            IAircraftInterface aircraftRepository,
+            IAircraftOptionInterface aircraftOptionsRepository
+        )
         {
             _aircraftRepository = aircraftRepository;
+            _aircraftOptionsRepository = aircraftOptionsRepository;
         }
 
         // GET: api/dashboard/admin/aircraft
@@ -52,22 +57,38 @@ namespace Raythos.Controllers.Admin
 
         // POST: api/dashboard/admin/aircraft
         [HttpPost]
-        public ActionResult PostAircraft([FromForm] AircraftDto aircraft)
+        public ActionResult PostAircraft(
+            [FromForm] AircraftPostDto aircraft,
+            [FromForm] List<AircraftOptionDto> aircraftOptions
+        )
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
+            if (_aircraftRepository.IsTeamAssigned((long)aircraft.TeamId))
+            {
+                return BadRequest(new { message = "Team is already assigned to another aircraft" });
+            }
+
             string slug = aircraft.Model.ToLower().Replace(" ", "-") + aircraft.SerialNumber;
             aircraft.Slug = slug;
-            AircraftDto newAircraft = _aircraftRepository.CreateAircraft(aircraft);
+            AircraftPostDto newAircraft = _aircraftRepository.CreateAircraft(aircraft);
 
             // TODO: IMPLEMENT FILE UPLOAD
 
             if (newAircraft == null)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+            else
+            {
+                foreach (var option in aircraftOptions)
+                {
+                    option.AircraftId = newAircraft.Id;
+                    _aircraftOptionsRepository.AddCustomization(option);
+                }
             }
 
             return Ok(newAircraft);

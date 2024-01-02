@@ -1,4 +1,4 @@
-﻿using Raythos.DTOs;
+﻿using Raythos.DTOs.Aircrafts;
 
 namespace Raythos.Interfaces
 {
@@ -8,7 +8,7 @@ namespace Raythos.Interfaces
 
         AircraftDto GetAircraft(long id);
 
-        AircraftDto CreateAircraft(AircraftDto aircraft);
+        AircraftPostDto CreateAircraft(AircraftPostDto aircraft);
 
         bool UpdateAircraft(long id, AircraftDto aircraft);
 
@@ -17,5 +17,7 @@ namespace Raythos.Interfaces
         bool IsAircraftExists(long id);
 
         int GetTotalAircrafts();
+
+        bool IsTeamAssigned(long teamId);
     }
 }

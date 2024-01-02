@@ -1,7 +1,7 @@
 ﻿using Raythos.Models;
 using System.ComponentModel.DataAnnotations;
 
-namespace Raythos.DTOs
+namespace Raythos.DTOs.Aircrafts
 {
     public class AircraftDto
     {

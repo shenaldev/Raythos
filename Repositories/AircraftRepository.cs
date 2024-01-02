@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using Raythos.DTOs;
+using Raythos.DTOs.Aircrafts;
 using Raythos.Interfaces;
 using Raythos.Models;
 
@@ -31,7 +31,7 @@ namespace Raythos.Repositories
             );
         }
 
-        public AircraftDto CreateAircraft(AircraftDto aircraft)
+        public AircraftPostDto CreateAircraft(AircraftPostDto aircraft)
         {
             try
             {
@@ -43,7 +43,7 @@ namespace Raythos.Repositories
                 int isSaved = _context.SaveChanges();
                 if (isSaved > 0)
                 {
-                    return _mapper.Map<AircraftDto>(newAircraft);
+                    return _mapper.Map<AircraftPostDto>(newAircraft);
                 }
                 return null;
             }
@@ -94,6 +94,11 @@ namespace Raythos.Repositories
         public int GetTotalAircrafts()
         {
             return _context.Aircrafts.Count();
+        }
+
+        public bool IsTeamAssigned(long teamId)
+        {
+            return _context.Aircrafts.Any(a => a.TeamId == teamId);
         }
     }
 }
