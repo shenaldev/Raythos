@@ -20,21 +20,21 @@ namespace Raythos.Repositories
         public ICollection<AircraftOptionDto> GetAircraftCustomizations(int skip, int take = 15)
         {
             return _mapper.Map<ICollection<AircraftOptionDto>>(
-                _context.AircraftCustomizations.Skip(skip).Take(take).OrderBy(a => a.Id).ToList()
+                _context.AircraftOptions.Skip(skip).Take(take).OrderBy(a => a.Id).ToList()
             );
         }
 
         public AircraftOptionDto GetAircraftCustomization(long id)
         {
             return _mapper.Map<AircraftOptionDto>(
-                _context.AircraftCustomizations.Where(a => a.Id == id).FirstOrDefault()
+                _context.AircraftOptions.Where(a => a.Id == id).FirstOrDefault()
             );
         }
 
         public ICollection<AircraftOptionDto> GetAircraftCustomizationByAircraftId(long AircraftId)
         {
             return _mapper.Map<ICollection<AircraftOptionDto>>(
-                _context.AircraftCustomizations.Where(a => a.AircraftId == AircraftId).ToList()
+                _context.AircraftOptions.Where(a => a.AircraftId == AircraftId).ToList()
             );
         }
 
@@ -43,7 +43,7 @@ namespace Raythos.Repositories
             try
             {
                 AircraftOption customization = _mapper.Map<AircraftOption>(aircraftCustomization);
-                _context.AircraftCustomizations.Add(customization);
+                _context.AircraftOptions.Add(customization);
                 int isSaved = _context.SaveChanges();
                 if (isSaved > 0)
                 {
@@ -78,8 +78,8 @@ namespace Raythos.Repositories
         {
             try
             {
-                AircraftOption customization = _context.AircraftCustomizations.Find(id);
-                _context.AircraftCustomizations.Remove(customization);
+                AircraftOption customization = _context.AircraftOptions.Find(id);
+                _context.AircraftOptions.Remove(customization);
                 int isSaved = _context.SaveChanges();
                 return isSaved > 0;
             }
@@ -91,12 +91,12 @@ namespace Raythos.Repositories
 
         public bool IsCustomizationExists(long id)
         {
-            return _context.AircraftCustomizations.Any(a => a.Id == id);
+            return _context.AircraftOptions.Any(a => a.Id == id);
         }
 
         public int GetTotalCustomizations()
         {
-            return _context.AircraftCustomizations.Count();
+            return _context.AircraftOptions.Count();
         }
     }
 }
