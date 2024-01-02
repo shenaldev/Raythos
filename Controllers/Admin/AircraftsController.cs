@@ -14,14 +14,17 @@ namespace Raythos.Controllers.Admin
     {
         private readonly IAircraftInterface _aircraftRepository;
         private readonly IAircraftOptionInterface _aircraftOptionsRepository;
+        private readonly ITeamInterface _teamRepository;
 
         public AircraftsController(
             IAircraftInterface aircraftRepository,
-            IAircraftOptionInterface aircraftOptionsRepository
+            IAircraftOptionInterface aircraftOptionsRepository,
+            ITeamInterface teamRepository
         )
         {
             _aircraftRepository = aircraftRepository;
             _aircraftOptionsRepository = aircraftOptionsRepository;
+            _teamRepository = teamRepository;
         }
 
         // GET: api/dashboard/admin/aircraft
@@ -44,14 +47,14 @@ namespace Raythos.Controllers.Admin
 
         // GET: api/dashboard/admin/aircraft/5
         [HttpGet("{id}")]
-        public ActionResult<AircraftDto> GetAircraft(long id)
+        public ActionResult<AircraftSingleDto> GetAircraft(long id)
         {
             if (!_aircraftRepository.IsAircraftExists(id))
             {
                 return NotFound();
             }
 
-            AircraftDto aircraft = _aircraftRepository.GetAircraft(id);
+            AircraftSingleDto aircraft = _aircraftRepository.GetAircraft(id);
             return Ok(aircraft);
         }
 
@@ -72,6 +75,11 @@ namespace Raythos.Controllers.Admin
                 return BadRequest(new { message = "Team is already assigned to another aircraft" });
             }
 
+            if (!_teamRepository.IsTeamExists((long)aircraft.TeamId))
+            {
+                return BadRequest(new { message = "Team does not exist" });
+            }
+
             string slug = aircraft.Model.ToLower().Replace(" ", "-") + aircraft.SerialNumber;
             aircraft.Slug = slug;
             AircraftPostDto newAircraft = _aircraftRepository.CreateAircraft(aircraft);
@@ -84,7 +92,7 @@ namespace Raythos.Controllers.Admin
             }
             else
             {
-                foreach (var option in aircraftOptions)
+                foreach (AircraftOptionDto option in aircraftOptions)
                 {
                     option.AircraftId = newAircraft.Id;
                     _aircraftOptionsRepository.AddCustomization(option);

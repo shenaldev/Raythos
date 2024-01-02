@@ -6,7 +6,7 @@ namespace Raythos.Interfaces
     {
         ICollection<AircraftDto> GetAircrafts(int skip, int take = 15);
 
-        AircraftDto GetAircraft(long id);
+        AircraftSingleDto GetAircraft(long id);
 
         AircraftPostDto CreateAircraft(AircraftPostDto aircraft);
 

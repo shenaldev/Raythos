@@ -24,10 +24,14 @@ namespace Raythos.Repositories
             );
         }
 
-        public AircraftDto GetAircraft(long id)
+        public AircraftSingleDto GetAircraft(long id)
         {
-            return _mapper.Map<AircraftDto>(
-                _context.Aircrafts.Where(a => a.Id == id).Include(a => a.Team).FirstOrDefault()
+            return _mapper.Map<AircraftSingleDto>(
+                _context.Aircrafts
+                    .Where(a => a.Id == id)
+                    .Include(a => a.Team)
+                    .Include(a => a.AircraftOptions)
+                    .FirstOrDefault()
             );
         }
 
