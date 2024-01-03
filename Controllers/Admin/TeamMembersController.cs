@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Raythos.DTOs;
 using Raythos.Interfaces;
@@ -8,6 +8,7 @@ namespace Raythos.Controllers.Admin
 {
     [Route("api/dashboard/admin/team/member")]
     [ApiController]
+    [Authorize(Roles = "Admin")]
     public class TeamMembersController : ControllerBase
     {
         private readonly ITeamMemberInterface _teamMemberRepository;

@@ -65,21 +65,20 @@ namespace Raythos.Controllers.Admin
             [FromForm] List<AircraftOptionDto> aircraftOptions
         )
         {
+            // Validation
             if (!ModelState.IsValid)
-            {
                 return BadRequest(ModelState);
-            }
+
+            if (aircraft.TeamId == null)
+                return BadRequest(new { message = "Team ID is required" });
 
             if (_aircraftRepository.IsTeamAssigned((long)aircraft.TeamId))
-            {
                 return BadRequest(new { message = "Team is already assigned to another aircraft" });
-            }
 
             if (!_teamRepository.IsTeamExists((long)aircraft.TeamId))
-            {
                 return BadRequest(new { message = "Team does not exist" });
-            }
 
+            // Create Slug
             string slug = aircraft.Model.ToLower().Replace(" ", "-") + aircraft.SerialNumber;
             aircraft.Slug = slug;
             AircraftPostDto newAircraft = _aircraftRepository.CreateAircraft(aircraft);

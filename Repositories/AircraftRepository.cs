@@ -79,7 +79,10 @@ namespace Raythos.Repositories
         {
             try
             {
-                Aircraft aircraft = _context.Aircrafts.Find(id);
+                Aircraft? aircraft = _context.Aircrafts.Find(id);
+                if (aircraft == null)
+                    return false;
+
                 _context.Aircrafts.Remove(aircraft);
                 int isSaved = _context.SaveChanges();
                 return isSaved > 0;

@@ -78,7 +78,10 @@ namespace Raythos.Repositories
         {
             try
             {
-                AircraftOption customization = _context.AircraftOptions.Find(id);
+                AircraftOption? customization = _context.AircraftOptions.Find(id);
+                if (customization == null)
+                    return false;
+
                 _context.AircraftOptions.Remove(customization);
                 int isSaved = _context.SaveChanges();
                 return isSaved > 0;

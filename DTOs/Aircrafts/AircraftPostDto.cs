@@ -5,9 +5,9 @@ namespace Raythos.DTOs.Aircrafts
     public class AircraftPostDto
     {
         public long Id { get; set; }
-        public string Model { get; set; }
-        public string Image { get; set; }
-        public string SerialNumber { get; set; }
+        public string Model { get; set; } = null!;
+        public string Image { get; set; } = null!;
+        public string SerialNumber { get; set; } = null!;
         public DateTime ManufacturedDate { get; set; }
         public string? EngineType { get; set; }
 
@@ -22,8 +22,8 @@ namespace Raythos.DTOs.Aircrafts
 
         [Required]
         public decimal? MaxPrice { get; set; }
-        public string Status { get; set; }
-        public string Description { get; set; }
+        public string Status { get; set; } = null!;
+        public string Description { get; set; } = null!;
         public string? Slug { get; set; } = "";
 
         [Required]

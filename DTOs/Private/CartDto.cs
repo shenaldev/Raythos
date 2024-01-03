@@ -23,6 +23,6 @@ namespace Raythos.DTOs.Private
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
 
-        public CartAircraftDto Aircraft { get; set; }
+        public CartAircraftDto Aircraft { get; set; } = null!;
     }
 }
