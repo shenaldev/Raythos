@@ -364,7 +364,7 @@
 									"formdata": [
 										{
 											"key": "Model",
-											"value": "AirBus",
+											"value": "AirJet",
 											"type": "text"
 										},
 										{
@@ -419,7 +419,37 @@
 										},
 										{
 											"key": "TeamId",
-											"value": "1",
+											"value": "3",
+											"type": "text"
+										},
+										{
+											"key": "aircraftOptions[0].Key",
+											"value": "Colors",
+											"type": "text"
+										},
+										{
+											"key": "aircraftOptions[0].Values",
+											"value": "[\"Red\", \"Green\", \"Blue\"]",
+											"type": "text"
+										},
+										{
+											"key": "aircraftOptions[0].Price",
+											"value": "100",
+											"type": "text"
+										},
+										{
+											"key": "aircraftOptions[1].Key",
+											"value": "Seats",
+											"type": "text"
+										},
+										{
+											"key": "aircraftOptions[1].Values",
+											"value": "[10,20,30]",
+											"type": "text"
+										},
+										{
+											"key": "aircraftOptions[1].Price",
+											"value": "100",
 											"type": "text"
 										}
 									]
@@ -440,6 +470,34 @@
 						},
 						{
 							"name": "Get Aircrafts",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"\r",
+											"pm.test(\"Response status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"\r",
+											"pm.test(\"Content-Type header is application/json\", function () {\r",
+											"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+											"});\r",
+											"\r",
+											"\r",
+											"pm.test(\"Total results reflects the actual count of results\", function () {\r",
+											"    const responseData = pm.response.json();\r",
+											"    \r",
+											"    pm.expect(responseData.totalResults).to.equal(responseData.data.length);\r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
 							"request": {
 								"auth": {
 									"type": "bearer",
@@ -454,7 +512,7 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{API_URL}}/dashboard/admin/aircraft",
+									"raw": "{{API_URL}}/dashboard/admin/aircraft?page=1",
 									"host": [
 										"{{API_URL}}"
 									],
@@ -462,6 +520,12 @@
 										"dashboard",
 										"admin",
 										"aircraft"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										}
 									]
 								}
 							},
@@ -481,6 +545,131 @@
 									]
 								},
 								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{API_URL}}/dashboard/admin/aircraft/3",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"dashboard",
+										"admin",
+										"aircraft",
+										"3"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Aircraft",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "Model",
+											"value": "AirBus JKS",
+											"type": "text"
+										},
+										{
+											"key": "Image",
+											"value": "\"https://image.com\"",
+											"type": "text"
+										},
+										{
+											"key": "SerialNumber",
+											"value": "5698562",
+											"type": "text"
+										},
+										{
+											"key": "ManufacturedData",
+											"value": "10/23/2023",
+											"type": "text"
+										},
+										{
+											"key": "EngineType",
+											"value": "MXA45",
+											"type": "text"
+										},
+										{
+											"key": "MaxSpeed",
+											"value": "1200.00",
+											"type": "text"
+										},
+										{
+											"key": "FuelCapacity",
+											"value": "50.00",
+											"type": "text"
+										},
+										{
+											"key": "BasePrice",
+											"value": "12000",
+											"type": "text"
+										},
+										{
+											"key": "MaxPrice",
+											"value": "20000",
+											"type": "text"
+										},
+										{
+											"key": "Status",
+											"value": "pending",
+											"type": "text"
+										},
+										{
+											"key": "Description",
+											"value": "somthing gose here",
+											"type": "text"
+										},
+										{
+											"key": "TeamId",
+											"value": "1",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{API_URL}}/dashboard/admin/aircraft/3",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"dashboard",
+										"admin",
+										"aircraft",
+										"3"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Aircraft",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
 								"header": [],
 								"url": {
 									"raw": "{{API_URL}}/dashboard/admin/aircraft/3",
@@ -1075,6 +1264,190 @@
 							"response": []
 						}
 					]
+				},
+				{
+					"name": "Cart",
+					"item": [
+						{
+							"name": "Add To Cart",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "UserId",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "AircraftId",
+											"value": "3",
+											"type": "text"
+										},
+										{
+											"key": "Quantity",
+											"value": "10",
+											"type": "text"
+										},
+										{
+											"key": "TotalPrice",
+											"value": "2000",
+											"type": "text"
+										},
+										{
+											"key": "Customizations",
+											"value": "{ [\"Color\": \"Red\"] , [\"Seats\": 4]}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{API_URL}}/user/carts",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"user",
+										"carts"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Cart",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "Id",
+											"value": "3",
+											"type": "text"
+										},
+										{
+											"key": "UserId",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "AircraftId",
+											"value": "3",
+											"type": "text"
+										},
+										{
+											"key": "Quantity",
+											"value": "12",
+											"type": "text"
+										},
+										{
+											"key": "TotalPrice",
+											"value": "2000",
+											"type": "text"
+										},
+										{
+											"key": "Customizations",
+											"value": "{ [\"Color\": \"Red\"] , [\"Seats\": 4]}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{API_URL}}/user/carts/3",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"user",
+										"carts",
+										"3"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Cart Items",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{API_URL}}/user/carts",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"user",
+										"carts"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Cart Item",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{API_URL}}/user/carts/3",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"user",
+										"carts",
+										"3"
+									]
+								}
+							},
+							"response": []
+						}
+					]
 				}
 			]
 		},
@@ -1125,6 +1498,52 @@
 									"path": [
 										"countries",
 										"5"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Aircrafts",
+					"item": [
+						{
+							"name": "Get Aircrafts",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{API_URL}}/aircrafts?page=1",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"aircrafts"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Aircraft By Id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{API_URL}}/aircrafts/3",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"aircrafts",
+										"3"
 									]
 								}
 							},
