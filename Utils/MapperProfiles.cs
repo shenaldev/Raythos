@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Raythos.DTOs;
 using Raythos.DTOs.Aircrafts;
+using Raythos.DTOs.Private;
 using Raythos.Models;
 
 namespace Raythos.Utils
@@ -20,6 +21,7 @@ namespace Raythos.Utils
             CreateMap<Aircraft, AircraftSingleDto>();
             CreateMap<AircraftPostDto, Aircraft>();
             CreateMap<Aircraft, AircraftPostDto>();
+            CreateMap<Aircraft, CartAircraftDto>();
 
             CreateMap<Team, TeamDto>();
             CreateMap<TeamDto, Team>();
@@ -27,6 +29,11 @@ namespace Raythos.Utils
             CreateMap<TeamMemberDto, TeamMember>();
             CreateMap<AircraftOption, AircraftOptionDto>();
             CreateMap<AircraftOptionDto, AircraftOption>();
+
+            CreateMap<Cart, CartDto>();
+            CreateMap<CartDto, Cart>();
+            CreateMap<Cart, CreateCartDto>();
+            CreateMap<CreateCartDto, Cart>();
         }
     }
 }
