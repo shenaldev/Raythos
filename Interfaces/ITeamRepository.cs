@@ -3,7 +3,7 @@ using Raythos.Responses;
 
 namespace Raythos.Interfaces
 {
-    public interface ITeamInterface
+    public interface ITeamRepository
     {
         ICollection<TeamDto> GetTeams(int skip, int take = 15);
 

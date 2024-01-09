@@ -7,7 +7,7 @@ using Raythos.Responses;
 
 namespace Raythos.Repositories
 {
-    public class TeamRepository : ITeamInterface
+    public class TeamRepository : ITeamRepository
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;

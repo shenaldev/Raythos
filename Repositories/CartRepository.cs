@@ -6,7 +6,7 @@ using Raythos.Models;
 
 namespace Raythos.Repositories
 {
-    public class CartRepository : ICartInterface
+    public class CartRepository : ICartRepository
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;

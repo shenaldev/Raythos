@@ -5,9 +5,9 @@ namespace Raythos.Utils
 {
     public class JWTHelper
     {
-        private readonly IUserInterface _userInterface;
+        private readonly IUserRepository _userInterface;
 
-        public JWTHelper(IUserInterface userInterface)
+        public JWTHelper(IUserRepository userInterface)
         {
             _userInterface = userInterface;
         }

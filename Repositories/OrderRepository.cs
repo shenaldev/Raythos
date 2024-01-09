@@ -5,7 +5,7 @@ using Raythos.Models;
 
 namespace Raythos.Repositories
 {
-    public class OrderRepository : IOrderInterface
+    public class OrderRepository : IOrderRepository
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;

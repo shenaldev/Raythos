@@ -2,7 +2,7 @@
 
 namespace Raythos.Interfaces
 {
-    public interface IAircraftInterface
+    public interface IAircraftRepository
     {
         ICollection<AircraftDto> GetAircrafts(int skip, int take = 15);
 

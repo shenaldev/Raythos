@@ -12,18 +12,18 @@ namespace Raythos.Controllers.Admin
     public class TeamMembersController : ControllerBase
     {
         private readonly ITeamMemberInterface _teamMemberRepository;
-        private readonly ITeamInterface _teamRepository;
+        private readonly ITeamRepository _teamRepository;
 
         public TeamMembersController(
             ITeamMemberInterface teamMemberRepository,
-            ITeamInterface teamRepository
+            ITeamRepository teamRepository
         )
         {
             _teamMemberRepository = teamMemberRepository;
             _teamRepository = teamRepository;
         }
 
-        public ITeamInterface TeamRepository { get; }
+        public ITeamRepository TeamRepository { get; }
 
         // GET: api/dashboard/admin/team/member/5
         [HttpGet("{teamId}")]

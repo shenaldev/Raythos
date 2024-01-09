@@ -12,14 +12,14 @@ namespace Raythos.Controllers.Private
     [Authorize]
     public class CartsController : ControllerBase
     {
-        private readonly ICartInterface _cartRepository;
-        private readonly IUserInterface _userInterface;
-        private readonly IAircraftInterface _aircraftInterface;
+        private readonly ICartRepository _cartRepository;
+        private readonly IUserRepository _userInterface;
+        private readonly IAircraftRepository _aircraftInterface;
 
         public CartsController(
-            ICartInterface cartRepository,
-            IUserInterface userInterface,
-            IAircraftInterface aircraftInterface
+            ICartRepository cartRepository,
+            IUserRepository userInterface,
+            IAircraftRepository aircraftInterface
         )
         {
             _cartRepository = cartRepository;

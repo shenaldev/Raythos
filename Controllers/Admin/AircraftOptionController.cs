@@ -10,11 +10,11 @@ namespace Raythos.Controllers.Admin
     public class AircraftOptionController : ControllerBase
     {
         private readonly IAircraftOptionInterface _aircraftOptionsRepository;
-        private readonly IAircraftInterface _aircraftRepository;
+        private readonly IAircraftRepository _aircraftRepository;
 
         public AircraftOptionController(
             IAircraftOptionInterface aircraftOptionsRepository,
-            IAircraftInterface aircraftRepository
+            IAircraftRepository aircraftRepository
         )
         {
             _aircraftOptionsRepository = aircraftOptionsRepository;

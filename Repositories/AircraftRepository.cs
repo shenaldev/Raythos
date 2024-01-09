@@ -6,7 +6,7 @@ using Raythos.Models;
 
 namespace Raythos.Repositories
 {
-    public class AircraftRepository : IAircraftInterface
+    public class AircraftRepository : IAircraftRepository
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;

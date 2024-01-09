@@ -3,7 +3,7 @@ using Raythos.Models;
 
 namespace Raythos.Interfaces
 {
-    public interface IUserInterface
+    public interface IUserRepository
     {
         ICollection<User> GetUsers(int skip, int take);
 

@@ -9,9 +9,9 @@ namespace Raythos.Controllers.Public
     [ApiController]
     public class AircraftsController : ControllerBase
     {
-        private readonly IAircraftInterface _aircraftRepository;
+        private readonly IAircraftRepository _aircraftRepository;
 
-        public AircraftsController(IAircraftInterface aircraftInterface)
+        public AircraftsController(IAircraftRepository aircraftInterface)
         {
             _aircraftRepository = aircraftInterface;
         }

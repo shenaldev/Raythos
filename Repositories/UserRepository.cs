@@ -4,7 +4,7 @@ using Raythos.Models;
 
 namespace Raythos.Repositories
 {
-    public class UserRepository : IUserInterface
+    public class UserRepository : IUserRepository
     {
         private readonly ApplicationDbContext _context;
 

@@ -12,10 +12,10 @@ namespace Raythos.Controllers.Private
     [Authorize]
     public class UsersController : ControllerBase
     {
-        private readonly IUserInterface _userRepository;
+        private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
 
-        public UsersController(IUserInterface userRepository, IMapper mapper)
+        public UsersController(IUserRepository userRepository, IMapper mapper)
         {
             _userRepository = userRepository;
             _mapper = mapper;

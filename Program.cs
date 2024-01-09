@@ -31,14 +31,14 @@ builder.Services
     .AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
 //Add Repositories
-builder.Services.AddScoped<IUserInterface, UserRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IAddressInterface, AddressRepository>();
-builder.Services.AddScoped<IAircraftInterface, AircraftRepository>();
-builder.Services.AddScoped<ITeamInterface, TeamRepository>();
+builder.Services.AddScoped<IAircraftRepository, AircraftRepository>();
+builder.Services.AddScoped<ITeamRepository, TeamRepository>();
 builder.Services.AddScoped<ITeamMemberInterface, TeamMemberRepository>();
 builder.Services.AddScoped<IAircraftOptionInterface, AircraftOptionRepository>();
-builder.Services.AddScoped<ICartInterface, CartRepository>();
-builder.Services.AddScoped<IOrderInterface, OrderRepository>();
+builder.Services.AddScoped<ICartRepository, CartRepository>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IOrderItemInterface, OrderItemRepository>();
 
 builder.Services.AddEndpointsApiExplorer();

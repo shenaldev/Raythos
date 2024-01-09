@@ -12,9 +12,9 @@ namespace Raythos.Controllers.Admin
     [Authorize(Roles = "Admin")]
     public class TeamsController : ControllerBase
     {
-        private readonly ITeamInterface _teamRepository;
+        private readonly ITeamRepository _teamRepository;
 
-        public TeamsController(ITeamInterface teamRepository)
+        public TeamsController(ITeamRepository teamRepository)
         {
             _teamRepository = teamRepository;
         }

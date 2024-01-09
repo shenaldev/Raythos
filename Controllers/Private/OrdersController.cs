@@ -12,16 +12,16 @@ namespace Raythos.Controllers.Private
     [Authorize]
     public class OrdersController : ControllerBase
     {
-        private readonly IOrderInterface _orderRepository;
-        private readonly IUserInterface _userInterface;
-        private readonly ICartInterface _cartRepository;
+        private readonly IOrderRepository _orderRepository;
+        private readonly IUserRepository _userInterface;
+        private readonly ICartRepository _cartRepository;
         private readonly IOrderItemInterface _orderItemRepository;
         private readonly int take = 15;
 
         public OrdersController(
-            IOrderInterface orderRepository,
-            IUserInterface userInterface,
-            ICartInterface cartRepository,
+            IOrderRepository orderRepository,
+            IUserRepository userInterface,
+            ICartRepository cartRepository,
             IOrderItemInterface orderItemRepository
         )
         {
@@ -83,8 +83,8 @@ namespace Raythos.Controllers.Private
 
             //if (order.AddressId)
 
-                //GET USER ID
-                JWTHelper jWTHelper = new(_userInterface);
+            //GET USER ID
+            JWTHelper jWTHelper = new(_userInterface);
             long userID = jWTHelper.GetUserID(User);
 
             //GET CART ITEMS

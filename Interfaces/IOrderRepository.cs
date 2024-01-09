@@ -2,7 +2,7 @@
 
 namespace Raythos.Interfaces
 {
-    public interface IOrderInterface
+    public interface IOrderRepository
     {
         ICollection<OrderDto> GetOrders(int skip, int take = 15);
 

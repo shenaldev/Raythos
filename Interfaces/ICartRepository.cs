@@ -2,7 +2,7 @@
 
 namespace Raythos.Interfaces
 {
-    public interface ICartInterface
+    public interface ICartRepository
     {
         public ICollection<CartDto> GetCarts(long userID);
 

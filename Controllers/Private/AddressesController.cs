@@ -13,9 +13,12 @@ namespace Raythos.Controllers.Private
     public class AddressesController : ControllerBase
     {
         private readonly IAddressInterface _addressInterface;
-        private readonly IUserInterface _userInterface;
+        private readonly IUserRepository _userInterface;
 
-        public AddressesController(IAddressInterface addressInterface, IUserInterface userInterface)
+        public AddressesController(
+            IAddressInterface addressInterface,
+            IUserRepository userInterface
+        )
         {
             _addressInterface = addressInterface;
             _userInterface = userInterface;
