@@ -9,11 +9,11 @@ namespace Raythos.Controllers.Admin
     [ApiController]
     public class AircraftOptionController : ControllerBase
     {
-        private readonly IAircraftOptionInterface _aircraftOptionsRepository;
+        private readonly IAircraftOptionRepository _aircraftOptionsRepository;
         private readonly IAircraftRepository _aircraftRepository;
 
         public AircraftOptionController(
-            IAircraftOptionInterface aircraftOptionsRepository,
+            IAircraftOptionRepository aircraftOptionsRepository,
             IAircraftRepository aircraftRepository
         )
         {
@@ -23,17 +23,17 @@ namespace Raythos.Controllers.Admin
 
         // GET: api/dashboard/admin/aircraft/customization
         [HttpGet]
-        public ActionResult<PaginatedResponse<AircraftOptionDto>> GetAllAircraftCust(
-            [FromQuery] int page = 1
-        )
+        public async Task<
+            ActionResult<PaginatedResponse<AircraftOptionDto>>
+        > GetAllAircraftCustAsync([FromQuery] int page = 1)
         {
             int take = 15;
             var skip = (page - 1) * take;
-            int total = _aircraftOptionsRepository.GetTotalCustomizations();
+            int total = await _aircraftOptionsRepository.GetTotalCustomizations();
             int lastPage = (int)Math.Ceiling((double)total / take);
 
             ICollection<AircraftOptionDto> customizations =
-                _aircraftOptionsRepository.GetAircraftCustomizations(skip, take);
+                await _aircraftOptionsRepository.GetAircraftCustomizations(skip, take);
             if (customizations == null)
             {
                 return NotFound();
@@ -49,16 +49,15 @@ namespace Raythos.Controllers.Admin
 
         // GET: api/dashboard/admin/aircraft/customization/5
         [HttpGet("{id}")]
-        public ActionResult<AircraftOptionDto> GetAircraftCust(long id)
+        public async Task<ActionResult<AircraftOptionDto>> GetAircraftCustAsync(long id)
         {
-            if (!_aircraftOptionsRepository.IsCustomizationExists(id))
+            if (!await _aircraftOptionsRepository.IsCustomizationExists(id))
             {
                 return NotFound();
             }
 
-            AircraftOptionDto customization = _aircraftOptionsRepository.GetAircraftCustomization(
-                id
-            );
+            AircraftOptionDto? customization =
+                await _aircraftOptionsRepository.GetAircraftCustomization(id);
             return Ok(customization);
         }
 
@@ -74,7 +73,7 @@ namespace Raythos.Controllers.Admin
             }
 
             ICollection<AircraftOptionDto> customizations =
-                _aircraftOptionsRepository.GetAircraftCustomizationByAircraftId(aircraftId);
+                await _aircraftOptionsRepository.GetAircraftCustomizationByAircraftId(aircraftId);
             return Ok(customizations);
         }
     }

@@ -6,7 +6,7 @@ using Raythos.Models;
 
 namespace Raythos.Repositories
 {
-    public class AircraftOptionRepository : IAircraftOptionInterface
+    public class AircraftOptionRepository : IAircraftOptionRepository
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
@@ -17,34 +17,45 @@ namespace Raythos.Repositories
             _mapper = mapper;
         }
 
-        public ICollection<AircraftOptionDto> GetAircraftCustomizations(int skip, int take = 15)
+        public async Task<ICollection<AircraftOptionDto>> GetAircraftCustomizations(
+            int skip,
+            int take = 15
+        )
         {
             return _mapper.Map<ICollection<AircraftOptionDto>>(
-                _context.AircraftOptions.Skip(skip).Take(take).OrderBy(a => a.Id).ToList()
+                await _context.AircraftOptions
+                    .Skip(skip)
+                    .Take(take)
+                    .OrderBy(a => a.Id)
+                    .ToListAsync()
             );
         }
 
-        public AircraftOptionDto GetAircraftCustomization(long id)
+        public async Task<AircraftOptionDto?> GetAircraftCustomization(long id)
         {
             return _mapper.Map<AircraftOptionDto>(
-                _context.AircraftOptions.Where(a => a.Id == id).FirstOrDefault()
+                await _context.AircraftOptions.Where(a => a.Id == id).FirstOrDefaultAsync()
             );
         }
 
-        public ICollection<AircraftOptionDto> GetAircraftCustomizationByAircraftId(long AircraftId)
+        public async Task<ICollection<AircraftOptionDto>> GetAircraftCustomizationByAircraftId(
+            long AircraftId
+        )
         {
             return _mapper.Map<ICollection<AircraftOptionDto>>(
-                _context.AircraftOptions.Where(a => a.AircraftId == AircraftId).ToList()
+                await _context.AircraftOptions.Where(a => a.AircraftId == AircraftId).ToListAsync()
             );
         }
 
-        public AircraftOptionDto AddCustomization(AircraftOptionDto aircraftCustomization)
+        public async Task<AircraftOptionDto?> AddCustomization(
+            AircraftOptionDto aircraftCustomization
+        )
         {
             try
             {
                 AircraftOption customization = _mapper.Map<AircraftOption>(aircraftCustomization);
-                _context.AircraftOptions.Add(customization);
-                int isSaved = _context.SaveChanges();
+                await _context.AircraftOptions.AddAsync(customization);
+                int isSaved = await _context.SaveChangesAsync();
                 if (isSaved > 0)
                 {
                     return _mapper.Map<AircraftOptionDto>(customization);
@@ -57,7 +68,9 @@ namespace Raythos.Repositories
             }
         }
 
-        public bool UpdateCustomization(AircraftOptionDto aircraftCustomization)
+        public async Task<AircraftOptionDto?> UpdateCustomization(
+            AircraftOptionDto aircraftCustomization
+        )
         {
             try
             {
@@ -65,26 +78,26 @@ namespace Raythos.Repositories
                     aircraftCustomization
                 );
                 _context.Entry(updateCustomization).State = EntityState.Modified;
-                int isSaved = _context.SaveChanges();
-                return isSaved > 0;
+                await _context.SaveChangesAsync();
+                return _mapper.Map<AircraftOptionDto>(updateCustomization);
             }
             catch
             {
-                return false;
+                return null;
             }
         }
 
-        public bool DeleteCustomization(long id)
+        public async Task<bool> DeleteCustomization(long id)
         {
             try
             {
-                AircraftOption? customization = _context.AircraftOptions.Find(id);
+                AircraftOption? customization = await _context.AircraftOptions.FindAsync(id);
                 if (customization == null)
                     return false;
 
                 _context.AircraftOptions.Remove(customization);
-                int isSaved = _context.SaveChanges();
-                return isSaved > 0;
+                await _context.SaveChangesAsync();
+                return true;
             }
             catch
             {
@@ -92,14 +105,14 @@ namespace Raythos.Repositories
             }
         }
 
-        public bool IsCustomizationExists(long id)
+        public async Task<bool> IsCustomizationExists(long id)
         {
-            return _context.AircraftOptions.Any(a => a.Id == id);
+            return await _context.AircraftOptions.AnyAsync(a => a.Id == id);
         }
 
-        public int GetTotalCustomizations()
+        public async Task<int> GetTotalCustomizations()
         {
-            return _context.AircraftOptions.Count();
+            return await _context.AircraftOptions.CountAsync();
         }
     }
 }

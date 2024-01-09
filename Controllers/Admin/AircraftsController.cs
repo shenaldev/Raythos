@@ -13,12 +13,12 @@ namespace Raythos.Controllers.Admin
     public class AircraftsController : ControllerBase
     {
         private readonly IAircraftRepository _aircraftRepository;
-        private readonly IAircraftOptionInterface _aircraftOptionsRepository;
+        private readonly IAircraftOptionRepository _aircraftOptionsRepository;
         private readonly ITeamRepository _teamRepository;
 
         public AircraftsController(
             IAircraftRepository aircraftRepository,
-            IAircraftOptionInterface aircraftOptionsRepository,
+            IAircraftOptionRepository aircraftOptionsRepository,
             ITeamRepository teamRepository
         )
         {

@@ -45,7 +45,7 @@ namespace Raythos.Controllers.Public
                 return NotFound();
             }
 
-            AircraftSingleDto aircraft = await _aircraftRepository.GetAircraft(id);
+            AircraftSingleDto? aircraft = await _aircraftRepository.GetAircraft(id);
             return Ok(aircraft);
         }
     }
