@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Raythos.DTOs;
+using Raythos.DTOs.Address;
 using Raythos.DTOs.Aircrafts;
 using Raythos.DTOs.Private;
 using Raythos.Models;
@@ -12,8 +13,11 @@ namespace Raythos.Utils
         {
             CreateMap<User, UserDto>();
             CreateMap<User, UpdateUserDto>();
+
             CreateMap<Address, AddressDto>();
             CreateMap<AddressDto, Address>();
+            CreateMap<Address, UpdateAddressDto>();
+            CreateMap<UpdateAddressDto, Address>();
 
             // Aircrafts
             CreateMap<Aircraft, AircraftDto>();

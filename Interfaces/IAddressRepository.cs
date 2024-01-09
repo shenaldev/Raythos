@@ -1,22 +1,23 @@
 ﻿using Raythos.DTOs;
+using Raythos.DTOs.Address;
 using Raythos.Models;
 
 namespace Raythos.Interfaces
 {
-    public interface IAddressInterface
+    public interface IAddressRepository
     {
-        ICollection<AddressDto> GetAddresses(long userId);
+        Task<ICollection<AddressDto>> GetAddresses(long userId);
 
-        Address GetAddress(long id);
+        Task<Address?> GetAddress(long id);
 
-        AddressDto CreateAddress(AddressDto address);
+        Task<AddressDto?> CreateAddress(AddressDto address);
 
-        bool UpdateAddress(long id, AddressDto address);
+        Task<AddressDto?> UpdateAddress(long id, UpdateAddressDto address);
 
-        bool DeleteAddress(long id);
+        Task<bool> DeleteAddress(long id);
 
-        bool IsAddressExists(long id);
+        Task<bool> IsAddressExists(long id);
 
-        bool IsAddressBelongsToUser(long id, long userId);
+        Task<bool> IsAddressBelongsToUser(long id, long userId);
     }
 }

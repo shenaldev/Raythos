@@ -1,14 +1,13 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Raythos.DTOs;
+using Raythos.DTOs.Address;
 using Raythos.Interfaces;
 using Raythos.Models;
 
 namespace Raythos.Repositories
 {
-    public class AddressRepository : IAddressInterface
+    public class AddressRepository : IAddressRepository
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
@@ -19,20 +18,20 @@ namespace Raythos.Repositories
             _mapper = mapper;
         }
 
-        public ICollection<AddressDto> GetAddresses(long userId)
+        public async Task<ICollection<AddressDto>> GetAddresses(long userId)
         {
-            ICollection<Address> addresses = _context.Addresses
+            ICollection<Address> addresses = await _context.Addresses
                 .Where(a => a.UserId == userId)
-                .ToList();
+                .ToListAsync();
             return _mapper.Map<ICollection<AddressDto>>(addresses);
         }
 
-        public Address GetAddress(long id)
+        public async Task<Address?> GetAddress(long id)
         {
-            var address = _context.Addresses
+            var address = await _context.Addresses
                 .Where(a => a.AddressID == id)
                 .Include(b => b.Country)
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
 
             if (address == null)
             {
@@ -42,13 +41,13 @@ namespace Raythos.Repositories
             return address;
         }
 
-        public AddressDto CreateAddress(AddressDto address)
+        public async Task<AddressDto?> CreateAddress(AddressDto address)
         {
             try
             {
                 Address newAddress = _mapper.Map<Address>(address);
-                _context.Addresses.Add(newAddress);
-                _context.SaveChanges();
+                await _context.Addresses.AddAsync(newAddress);
+                await _context.SaveChangesAsync();
                 return address;
             }
             catch
@@ -57,31 +56,42 @@ namespace Raythos.Repositories
             }
         }
 
-        public bool UpdateAddress(long id, AddressDto address)
+        public async Task<AddressDto?> UpdateAddress(long id, UpdateAddressDto addressDto)
         {
             try
             {
-                Address updatedAddress = _mapper.Map<Address>(address);
-                _context.Addresses.Update(updatedAddress);
-                _context.SaveChanges();
-                return true;
+                var exsistingAddress = await _context.Addresses.FirstOrDefaultAsync(
+                    a => a.AddressID == id
+                );
+                if (exsistingAddress == null)
+                {
+                    return null;
+                }
+
+                exsistingAddress.Street = addressDto.Street;
+                exsistingAddress.City = addressDto.City;
+                exsistingAddress.PostalCode = addressDto.PostalCode;
+                exsistingAddress.CountryId = addressDto.CountryId;
+
+                await _context.SaveChangesAsync();
+                return _mapper.Map<AddressDto>(exsistingAddress);
             }
             catch
             {
-                return false;
+                return null;
             }
         }
 
-        public bool DeleteAddress(long id)
+        public async Task<bool> DeleteAddress(long id)
         {
-            Address? address = _context.Addresses.Find(id);
+            var address = await _context.Addresses.FindAsync(id);
             if (address == null)
                 return false;
 
             try
             {
                 _context.Addresses.Remove(address);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
                 return true;
             }
             catch
@@ -90,14 +100,14 @@ namespace Raythos.Repositories
             }
         }
 
-        public bool IsAddressExists(long id)
+        public async Task<bool> IsAddressExists(long id)
         {
-            return _context.Addresses.Any(a => a.AddressID == id);
+            return await _context.Addresses.AnyAsync(a => a.AddressID == id);
         }
 
-        public bool IsAddressBelongsToUser(long id, long userId)
+        public async Task<bool> IsAddressBelongsToUser(long id, long userId)
         {
-            return _context.Addresses.Any(a => a.AddressID == id && a.UserId == userId);
+            return await _context.Addresses.AnyAsync(a => a.AddressID == id && a.UserId == userId);
         }
     }
 }

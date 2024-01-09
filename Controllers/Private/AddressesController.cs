@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Raythos.DTOs;
+using Raythos.DTOs.Address;
 using Raythos.Interfaces;
 using Raythos.Models;
 using Raythos.Utils;
@@ -12,15 +13,12 @@ namespace Raythos.Controllers.Private
     [Authorize]
     public class AddressesController : ControllerBase
     {
-        private readonly IAddressInterface _addressInterface;
+        private readonly IAddressRepository _addressRepo;
         private readonly IUserRepository _userInterface;
 
-        public AddressesController(
-            IAddressInterface addressInterface,
-            IUserRepository userInterface
-        )
+        public AddressesController(IAddressRepository addressRepo, IUserRepository userInterface)
         {
-            _addressInterface = addressInterface;
+            _addressRepo = addressRepo;
             _userInterface = userInterface;
         }
 
@@ -36,14 +34,14 @@ namespace Raythos.Controllers.Private
                 return null;
             }
 
-            return _addressInterface.GetAddresses(userID);
+            return await _addressRepo.GetAddresses(userID);
         }
 
         // GET: api/user/addresses/5
         [HttpGet("{id}")]
-        public ActionResult<Address>? GetAddress(long id)
+        public async Task<ActionResult<Address>?> GetAddress(long id)
         {
-            Address address = _addressInterface.GetAddress(id);
+            var address = await _addressRepo.GetAddress(id);
 
             if (address == null)
             {
@@ -71,7 +69,7 @@ namespace Raythos.Controllers.Private
             JWTHelper jWTHelper = new(_userInterface);
             long userID = await jWTHelper.GetUserID(User);
             address.UserId = userID;
-            AddressDto newAddress = _addressInterface.CreateAddress(address);
+            AddressDto? newAddress = await _addressRepo.CreateAddress(address);
 
             if (newAddress == null)
             {
@@ -83,7 +81,7 @@ namespace Raythos.Controllers.Private
 
         // PUT: api/user/addresses/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutAddress(long id, [FromForm] AddressDto address)
+        public async Task<IActionResult> PutAddress(long id, [FromForm] UpdateAddressDto address)
         {
             if (!ModelState.IsValid)
             {
@@ -96,7 +94,7 @@ namespace Raythos.Controllers.Private
                 return BadRequest(ModelState);
             }
 
-            if (!_addressInterface.IsAddressExists(id))
+            if (!await _addressRepo.IsAddressExists(id))
             {
                 return NotFound();
             }
@@ -104,26 +102,27 @@ namespace Raythos.Controllers.Private
             JWTHelper jWTHelper = new(_userInterface);
             long userID = await jWTHelper.GetUserID(User);
 
-            if (!_addressInterface.IsAddressBelongsToUser(id, userID))
+            if (!await _addressRepo.IsAddressBelongsToUser(id, userID))
             {
                 return Unauthorized();
             }
 
             address.UserId = userID;
 
-            if (!_addressInterface.UpdateAddress(id, address))
+            var updatedAddress = await _addressRepo.UpdateAddress(id, address);
+            if (updatedAddress == null)
             {
                 return StatusCode(500);
             }
 
-            return NoContent();
+            return Ok(updatedAddress);
         }
 
         // DELETE: api/user/addresses/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAddress(long id)
         {
-            if (!_addressInterface.IsAddressExists(id))
+            if (!await _addressRepo.IsAddressExists(id))
             {
                 return NotFound();
             }
@@ -131,12 +130,12 @@ namespace Raythos.Controllers.Private
             JWTHelper jWTHelper = new(_userInterface);
             long userID = await jWTHelper.GetUserID(User);
 
-            if (!_addressInterface.IsAddressBelongsToUser(id, userID))
+            if (!await _addressRepo.IsAddressBelongsToUser(id, userID))
             {
                 return Unauthorized();
             }
 
-            if (!_addressInterface.DeleteAddress(id))
+            if (!await _addressRepo.DeleteAddress(id))
             {
                 return StatusCode(500);
             }
