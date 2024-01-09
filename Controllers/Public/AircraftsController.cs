@@ -18,14 +18,16 @@ namespace Raythos.Controllers.Public
 
         // GET: api/aircrafts
         [HttpGet]
-        public ActionResult<PaginatedResponse<AircraftDto>> GetAircrafts([FromQuery] int page = 1)
+        public async Task<ActionResult<PaginatedResponse<AircraftDto>>> GetAircraftsAsync(
+            [FromQuery] int page = 1
+        )
         {
             int take = 15;
             var skip = (page - 1) * take;
-            int totalTeams = _aircraftRepository.GetTotalAircrafts();
+            int totalTeams = await _aircraftRepository.GetTotalAircrafts();
             int lastPage = (int)Math.Ceiling((double)totalTeams / take);
 
-            ICollection<AircraftDto> aircrafts = _aircraftRepository.GetAircrafts(skip, take);
+            ICollection<AircraftDto> aircrafts = await _aircraftRepository.GetAircrafts(skip, take);
             if (aircrafts == null)
             {
                 return NotFound();
@@ -36,14 +38,14 @@ namespace Raythos.Controllers.Public
 
         // GET: api/dashboard/admin/aircraft/5
         [HttpGet("{id}")]
-        public ActionResult<AircraftSingleDto> GetAircraft(long id)
+        public async Task<ActionResult<AircraftSingleDto>> GetAircraftAsync(long id)
         {
-            if (!_aircraftRepository.IsAircraftExists(id))
+            if (!await _aircraftRepository.IsAircraftExists(id))
             {
                 return NotFound();
             }
 
-            AircraftSingleDto aircraft = _aircraftRepository.GetAircraft(id);
+            AircraftSingleDto aircraft = await _aircraftRepository.GetAircraft(id);
             return Ok(aircraft);
         }
     }

@@ -29,14 +29,16 @@ namespace Raythos.Controllers.Admin
 
         // GET: api/dashboard/admin/aircraft
         [HttpGet]
-        public ActionResult<PaginatedResponse<AircraftDto>> GetAircrafts([FromQuery] int page = 1)
+        public async Task<ActionResult<PaginatedResponse<AircraftDto>>> GetAircrafts(
+            [FromQuery] int page = 1
+        )
         {
             int take = 15;
             var skip = (page - 1) * take;
-            int totalTeams = _aircraftRepository.GetTotalAircrafts();
+            int totalTeams = await _aircraftRepository.GetTotalAircrafts();
             int lastPage = (int)Math.Ceiling((double)totalTeams / take);
 
-            ICollection<AircraftDto> aircrafts = _aircraftRepository.GetAircrafts(skip, take);
+            ICollection<AircraftDto> aircrafts = await _aircraftRepository.GetAircrafts(skip, take);
             if (aircrafts == null)
             {
                 return NotFound();
@@ -47,20 +49,20 @@ namespace Raythos.Controllers.Admin
 
         // GET: api/dashboard/admin/aircraft/5
         [HttpGet("{id}")]
-        public ActionResult<AircraftSingleDto> GetAircraft(long id)
+        public async Task<ActionResult<AircraftSingleDto>> GetAircraftAsync(long id)
         {
-            if (!_aircraftRepository.IsAircraftExists(id))
+            if (!await _aircraftRepository.IsAircraftExists(id))
             {
                 return NotFound();
             }
 
-            AircraftSingleDto aircraft = _aircraftRepository.GetAircraft(id);
+            AircraftSingleDto? aircraft = await _aircraftRepository.GetAircraft(id);
             return Ok(aircraft);
         }
 
         // POST: api/dashboard/admin/aircraft
         [HttpPost]
-        public ActionResult PostAircraft(
+        public async Task<ActionResult> PostAircraftAsync(
             [FromForm] AircraftPostDto aircraft,
             [FromForm] List<AircraftOptionDto> aircraftOptions
         )
@@ -72,7 +74,7 @@ namespace Raythos.Controllers.Admin
             if (aircraft.TeamId == null)
                 return BadRequest(new { message = "Team ID is required" });
 
-            if (_aircraftRepository.IsTeamAssigned((long)aircraft.TeamId))
+            if (await _aircraftRepository.IsTeamAssigned((long)aircraft.TeamId))
                 return BadRequest(new { message = "Team is already assigned to another aircraft" });
 
             if (!_teamRepository.IsTeamExists((long)aircraft.TeamId))
@@ -81,7 +83,7 @@ namespace Raythos.Controllers.Admin
             // Create Slug
             string slug = aircraft.Model.ToLower().Replace(" ", "-") + aircraft.SerialNumber;
             aircraft.Slug = slug;
-            AircraftPostDto newAircraft = _aircraftRepository.CreateAircraft(aircraft);
+            AircraftPostDto? newAircraft = await _aircraftRepository.CreateAircraft(aircraft);
 
             // TODO: IMPLEMENT FILE UPLOAD
 
@@ -103,22 +105,22 @@ namespace Raythos.Controllers.Admin
 
         // PUT: api/dashboard/admin/aircraft/5
         [HttpPut("{id}")]
-        public ActionResult PutAircraft(long id, [FromForm] AircraftDto aircraft)
+        public async Task<ActionResult> PutAircraftAsync(long id, [FromForm] AircraftDto aircraft)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (!_aircraftRepository.IsAircraftExists(id))
+            if (!await _aircraftRepository.IsAircraftExists(id))
             {
                 return NotFound();
             }
 
-            bool isUpdated = _aircraftRepository.UpdateAircraft(id, aircraft);
-            if (isUpdated)
+            var updatedAircraft = await _aircraftRepository.UpdateAircraft(id, aircraft);
+            if (updatedAircraft != null)
             {
-                return Ok();
+                return Ok(updatedAircraft);
             }
             else
             {
@@ -128,14 +130,14 @@ namespace Raythos.Controllers.Admin
 
         // DELETE: api/dashboard/admin/aircraft/5
         [HttpDelete("{id}")]
-        public ActionResult DeleteAircraft(long id)
+        public async Task<ActionResult> DeleteAircraftAsync(long id)
         {
-            if (!_aircraftRepository.IsAircraftExists(id))
+            if (!await _aircraftRepository.IsAircraftExists(id))
             {
                 return NotFound();
             }
 
-            bool isDeleted = _aircraftRepository.DeleteAircraft(id);
+            bool isDeleted = await _aircraftRepository.DeleteAircraft(id);
             if (isDeleted)
             {
                 return Ok();

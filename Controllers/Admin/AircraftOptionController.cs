@@ -64,11 +64,11 @@ namespace Raythos.Controllers.Admin
 
         // GET: api/dashboard/admin/aircraft/customization/aircraft/5
         [HttpGet("aircraft/{aircraftId}")]
-        public ActionResult<ICollection<AircraftOptionDto>> GetAircraftCustByAircraftId(
-            long aircraftId
-        )
+        public async Task<
+            ActionResult<ICollection<AircraftOptionDto>>
+        > GetAircraftCustByAircraftIdAsync(long aircraftId)
         {
-            if (!_aircraftRepository.IsAircraftExists(aircraftId))
+            if (!await _aircraftRepository.IsAircraftExists(aircraftId))
             {
                 return NotFound();
             }

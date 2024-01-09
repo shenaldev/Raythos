@@ -4,20 +4,20 @@ namespace Raythos.Interfaces
 {
     public interface IAircraftRepository
     {
-        ICollection<AircraftDto> GetAircrafts(int skip, int take = 15);
+        Task<ICollection<AircraftDto>> GetAircrafts(int skip, int take = 15);
 
-        AircraftSingleDto GetAircraft(long id);
+        Task<AircraftSingleDto?> GetAircraft(long id);
 
-        AircraftPostDto CreateAircraft(AircraftPostDto aircraft);
+        Task<AircraftPostDto?> CreateAircraft(AircraftPostDto aircraft);
 
-        bool UpdateAircraft(long id, AircraftDto aircraft);
+        Task<AircraftDto?> UpdateAircraft(long id, AircraftDto aircraft);
 
-        bool DeleteAircraft(long id);
+        Task<bool> DeleteAircraft(long id);
 
-        bool IsAircraftExists(long id);
+        Task<bool> IsAircraftExists(long id);
 
-        int GetTotalAircrafts();
+        Task<int> GetTotalAircrafts();
 
-        bool IsTeamAssigned(long teamId);
+        Task<bool> IsTeamAssigned(long teamId);
     }
 }

@@ -56,7 +56,7 @@ namespace Raythos.Controllers.Private
             if (cart.AircraftId == null)
                 return BadRequest(new { message = "Aircraft ID is required" });
 
-            if (!_aircraftInterface.IsAircraftExists((long)cart.AircraftId))
+            if (!await _aircraftInterface.IsAircraftExists((long)cart.AircraftId))
                 return BadRequest(new { message = "Aircraft does not exist" });
 
             JWTHelper jWTHelper = new(_userInterface);
@@ -85,7 +85,7 @@ namespace Raythos.Controllers.Private
             if (cart.AircraftId == null)
                 return BadRequest(new { message = "Aircraft ID is required" });
 
-            if (!_aircraftInterface.IsAircraftExists((long)cart.AircraftId))
+            if (!await _aircraftInterface.IsAircraftExists((long)cart.AircraftId))
                 return BadRequest(new { message = "Aircraft does not exist" });
 
             JWTHelper jWTHelper = new(_userInterface);

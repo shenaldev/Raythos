@@ -17,25 +17,25 @@ namespace Raythos.Repositories
             _mapper = mapper;
         }
 
-        public ICollection<AircraftDto> GetAircrafts(int skip, int take = 15)
+        public async Task<ICollection<AircraftDto>> GetAircrafts(int skip, int take = 15)
         {
             return _mapper.Map<ICollection<AircraftDto>>(
-                _context.Aircrafts.Skip(skip).Take(take).OrderBy(a => a.Id).ToList()
+                await _context.Aircrafts.Skip(skip).Take(take).OrderBy(a => a.Id).ToListAsync()
             );
         }
 
-        public AircraftSingleDto GetAircraft(long id)
+        public async Task<AircraftSingleDto?> GetAircraft(long id)
         {
             return _mapper.Map<AircraftSingleDto>(
-                _context.Aircrafts
+                await _context.Aircrafts
                     .Where(a => a.Id == id)
                     .Include(a => a.Team)
                     .Include(a => a.AircraftOptions)
-                    .FirstOrDefault()
+                    .FirstOrDefaultAsync()
             );
         }
 
-        public AircraftPostDto CreateAircraft(AircraftPostDto aircraft)
+        public async Task<AircraftPostDto?> CreateAircraft(AircraftPostDto aircraft)
         {
             try
             {
@@ -43,8 +43,8 @@ namespace Raythos.Repositories
                 newAircraft.CreatedAt = DateTime.Now;
                 newAircraft.UpdatedAt = DateTime.Now;
 
-                _context.Aircrafts.Add(newAircraft);
-                int isSaved = _context.SaveChanges();
+                await _context.Aircrafts.AddAsync(newAircraft);
+                int isSaved = await _context.SaveChangesAsync();
                 if (isSaved > 0)
                 {
                     return _mapper.Map<AircraftPostDto>(newAircraft);
@@ -57,7 +57,7 @@ namespace Raythos.Repositories
             }
         }
 
-        public bool UpdateAircraft(long id, AircraftDto aircraft)
+        public async Task<AircraftDto?> UpdateAircraft(long id, AircraftDto aircraft)
         {
             try
             {
@@ -66,25 +66,25 @@ namespace Raythos.Repositories
                 updateAircraft.UpdatedAt = DateTime.Now;
 
                 _context.Entry(updateAircraft).State = EntityState.Modified;
-                int isSaved = _context.SaveChanges();
-                return isSaved > 0;
+                await _context.SaveChangesAsync();
+                return _mapper.Map<AircraftDto>(updateAircraft);
             }
             catch
             {
-                return false;
+                return null;
             }
         }
 
-        public bool DeleteAircraft(long id)
+        public async Task<bool> DeleteAircraft(long id)
         {
             try
             {
-                Aircraft? aircraft = _context.Aircrafts.Find(id);
+                Aircraft? aircraft = await _context.Aircrafts.FindAsync(id);
                 if (aircraft == null)
                     return false;
 
                 _context.Aircrafts.Remove(aircraft);
-                int isSaved = _context.SaveChanges();
+                int isSaved = await _context.SaveChangesAsync();
                 return isSaved > 0;
             }
             catch
@@ -93,19 +93,19 @@ namespace Raythos.Repositories
             }
         }
 
-        public bool IsAircraftExists(long id)
+        public async Task<bool> IsAircraftExists(long id)
         {
-            return _context.Aircrafts.Any(a => a.Id == id);
+            return await _context.Aircrafts.AnyAsync(a => a.Id == id);
         }
 
-        public int GetTotalAircrafts()
+        public async Task<int> GetTotalAircrafts()
         {
-            return _context.Aircrafts.Count();
+            return await _context.Aircrafts.CountAsync();
         }
 
-        public bool IsTeamAssigned(long teamId)
+        public async Task<bool> IsTeamAssigned(long teamId)
         {
-            return _context.Aircrafts.Any(a => a.TeamId == teamId);
+            return await _context.Aircrafts.AnyAsync(a => a.TeamId == teamId);
         }
     }
 }
