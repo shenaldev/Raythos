@@ -24,22 +24,24 @@ namespace Raythos.Controllers.Admin
 
         // GET: api/dashboard/admin/user
         [HttpGet]
-        public ActionResult<PaginatedResponse<UserDto>> GetUsers([FromQuery] int page = 1)
+        public async Task<ActionResult<PaginatedResponse<UserDto>>> GetUsers(
+            [FromQuery] int page = 1
+        )
         {
             var take = 15;
             var skip = (page - 1) * take;
-            int totalUsers = _userRepository.GetTotalUsers();
+            int totalUsers = await _userRepository.GetTotalUsers();
             int lastPage = (int)Math.Ceiling((double)totalUsers / take);
 
-            var users = _mapper.Map<List<UserDto>>(_userRepository.GetUsers(skip, take));
+            var users = _mapper.Map<List<UserDto>>(await _userRepository.GetUsers(skip, take));
             return PaginatedResponse<UserDto>.Paginate(users, totalUsers, page, lastPage);
         }
 
         // GET: api/dashboard/admin/user/5
         [HttpGet("{id}")]
-        public ActionResult<UserDto> GetUser(long id)
+        public async Task<ActionResult<UserDto>> GetUser(long id)
         {
-            var user = _mapper.Map<UserDto>(_userRepository.GetUser(id));
+            var user = _mapper.Map<UserDto>(await _userRepository.GetUser(id));
 
             if (user == null)
             {
@@ -51,14 +53,14 @@ namespace Raythos.Controllers.Admin
 
         // PUT: api/dashboard/admin/user/5
         [HttpPut("{id}")]
-        public IActionResult PutUser(long id, [FromForm] UpdateUserDto user)
+        public async Task<IActionResult> PutUser(long id, [FromForm] UpdateUserDto user)
         {
             if (id != user.Id)
             {
                 return BadRequest("Invalid User ID");
             }
 
-            if (!_userRepository.IsUserExists(id))
+            if (!await _userRepository.IsUserExists(id))
             {
                 return NotFound();
             }
@@ -68,18 +70,18 @@ namespace Raythos.Controllers.Admin
                 return BadRequest(ModelState);
             }
 
-            var isUpdated = _userRepository.UpdateUser(id, user);
-            if (!isUpdated)
+            var updatedUser = await _userRepository.UpdateUser(id, user);
+            if (updatedUser == null)
             {
                 return BadRequest("User not updated");
             }
 
-            return NoContent();
+            return Ok(_mapper.Map<UserDto>(updatedUser));
         }
 
         // POST: api/dashboard/admin/user
         [HttpPost]
-        public ActionResult<UserDto> PostUser([FromForm] User user)
+        public async Task<ActionResult<UserDto>> PostUser([FromForm] User user)
         {
             if (!ModelState.IsValid)
             {
@@ -87,16 +89,16 @@ namespace Raythos.Controllers.Admin
             }
 
             //CHECK IF USER ALREADY EXISTS
-            if (_userRepository.IsUserExists(user.Email))
+            if (await _userRepository.IsUserExists(user.Email))
             {
                 return BadRequest("User email already exists");
             }
 
-            User createdUser = _userRepository.CreateUser(user);
+            User createdUser = await _userRepository.CreateUser(user);
 
             if (createdUser != null)
             {
-                var userData = CreatedAtAction("GetUser", new { id = user.Id }, user);
+                var userData = CreatedAtAction(nameof(GetUser), new { id = user.Id }, user);
                 return userData;
             }
 
@@ -105,22 +107,22 @@ namespace Raythos.Controllers.Admin
 
         // DELETE: api/dashboard/admin/user/5
         [HttpDelete("{id}")]
-        public IActionResult DeleteUser(long id)
+        public async Task<IActionResult> DeleteUser(long id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            User user = _userRepository.GetUser(id);
+            var user = await _userRepository.GetUser(id);
             if (user == null)
             {
                 return NotFound();
             }
 
-            _userRepository.DeleteUser(id);
+            await _userRepository.DeleteUser(id);
 
-            return Ok("User Has Deleted");
+            return NoContent();
         }
     }
 }

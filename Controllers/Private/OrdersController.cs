@@ -33,10 +33,12 @@ namespace Raythos.Controllers.Private
 
         // GET: api/user/orders
         [HttpGet]
-        public ActionResult<PaginatedResponse<OrderDto>> GetOrders([FromQuery] int page = 1)
+        public async Task<ActionResult<PaginatedResponse<OrderDto>>> GetOrders(
+            [FromQuery] int page = 1
+        )
         {
             JWTHelper jWTHelper = new(_userInterface);
-            long userID = jWTHelper.GetUserID(User);
+            long userID = await jWTHelper.GetUserID(User);
 
             var skip = (page - 1) * take;
             int totalTeams = _orderRepository.GetOrdersCountByUserId(userID);
@@ -53,10 +55,10 @@ namespace Raythos.Controllers.Private
 
         // GET: api/user/orders/5
         [HttpGet("{id}")]
-        public ActionResult<OrderDto> GetOrder(long id)
+        public async Task<ActionResult<OrderDto>> GetOrder(long id)
         {
             JWTHelper jWTHelper = new(_userInterface);
-            long userID = jWTHelper.GetUserID(User);
+            long userID = await jWTHelper.GetUserID(User);
 
             if (!_orderRepository.OrderExists(id))
             {
@@ -74,7 +76,7 @@ namespace Raythos.Controllers.Private
 
         // POST: api/user/orders
         [HttpPost]
-        public ActionResult<OrderDto> PostOrder([FromForm] CreateOrderDto order)
+        public async Task<ActionResult<OrderDto>> PostOrder([FromForm] CreateOrderDto order)
         {
             if (!ModelState.IsValid)
             {
@@ -85,7 +87,7 @@ namespace Raythos.Controllers.Private
 
             //GET USER ID
             JWTHelper jWTHelper = new(_userInterface);
-            long userID = jWTHelper.GetUserID(User);
+            long userID = await jWTHelper.GetUserID(User);
 
             //GET CART ITEMS
             ICollection<CartDto> carts = _cartRepository.GetCarts(userID);

@@ -17,7 +17,7 @@ namespace Raythos.Utils
             return user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         }
 
-        public long GetUserID(ClaimsPrincipal user)
+        public async Task<long> GetUserID(ClaimsPrincipal user)
         {
             string? email = GetEmailFromJWT(user);
 
@@ -26,7 +26,7 @@ namespace Raythos.Utils
                 return -1;
             }
 
-            long userID = _userInterface.GetUserID(email);
+            long userID = await _userInterface.GetUserID(email);
             return userID;
         }
     }

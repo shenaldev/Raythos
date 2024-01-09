@@ -1,4 +1,5 @@
-﻿using Raythos.DTOs;
+﻿using Microsoft.EntityFrameworkCore;
+using Raythos.DTOs;
 using Raythos.Interfaces;
 using Raythos.Models;
 
@@ -14,41 +15,41 @@ namespace Raythos.Repositories
         }
 
         //Get All Users With Pagination
-        public ICollection<User> GetUsers(int skip, int take = 15)
+        public async Task<ICollection<User>> GetUsers(int skip, int take = 15)
         {
-            return _context.Users.Skip(skip).Take(take).OrderBy(u => u.Id).ToList();
+            return await _context.Users.Skip(skip).Take(take).OrderBy(u => u.Id).ToListAsync();
         }
 
         //Get User By Id
-        public User GetUser(long id)
+        public async Task<User?> GetUser(long id)
         {
-            return _context.Users.Where(u => u.Id == id).FirstOrDefault();
+            return await _context.Users.Where(u => u.Id == id).FirstOrDefaultAsync();
         }
 
         //Get User By Email
-        public User GetUser(string email)
+        public async Task<User?> GetUser(string email)
         {
-            return _context.Users.Where(u => u.Email == email).FirstOrDefault();
+            return await _context.Users.Where(u => u.Email == email).FirstOrDefaultAsync();
         }
 
         //Add New User
-        public User CreateUser(User user)
+        public async Task<User> CreateUser(User user)
         {
             user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
             user.CreatedAt = DateTime.Now;
             user.UpdatedAt = DateTime.Now;
-            _context.Users.Add(user);
-            _context.SaveChanges();
+            await _context.Users.AddAsync(user);
+            await _context.SaveChangesAsync();
             return user;
         }
 
         //Update User
-        public bool UpdateUser(long id, UpdateUserDto user)
+        public async Task<User?> UpdateUser(long id, UpdateUserDto user)
         {
-            User? userData = _context.Users.Where(u => u.Id == id).FirstOrDefault();
+            var userData = await _context.Users.Where(u => u.Id == id).FirstOrDefaultAsync();
             if (userData == null)
             {
-                return false;
+                return null;
             }
 
             userData.FName = user.FName;
@@ -57,45 +58,48 @@ namespace Raythos.Repositories
             userData.IsAdmin = user.IsAdmin;
             userData.UpdatedAt = DateTime.Now;
 
-            var saved = _context.SaveChanges();
-            return saved > 0;
+            await _context.SaveChangesAsync();
+            return userData;
         }
 
         //Delete User
-        public bool DeleteUser(long id)
+        public async Task<bool> DeleteUser(long id)
         {
-            User? userData = _context.Users.Where(u => u.Id == id).FirstOrDefault();
+            var userData = await _context.Users.Where(u => u.Id == id).FirstOrDefaultAsync();
             if (userData == null)
             {
                 return false;
             }
 
             _context.Users.Remove(userData);
-            var saved = _context.SaveChanges();
+            var saved = await _context.SaveChangesAsync();
             return saved > 0;
         }
 
         //Check If User Exists
-        public bool IsUserExists(string email)
+        public async Task<bool> IsUserExists(string email)
         {
-            return _context.Users.Any(u => u.Email == email);
+            return await _context.Users.AnyAsync(u => u.Email == email);
         }
 
-        public bool IsUserExists(long id)
+        public async Task<bool> IsUserExists(long id)
         {
-            return _context.Users.Any(u => u.Id == id);
+            return await _context.Users.AnyAsync(u => u.Id == id);
         }
 
         //Get Total Users
-        public int GetTotalUsers()
+        public async Task<int> GetTotalUsers()
         {
-            return _context.Users.Count();
+            return await _context.Users.CountAsync();
         }
 
         //Get User ID
-        public long GetUserID(string email)
+        public async Task<long> GetUserID(string email)
         {
-            return _context.Users.Where(u => u.Email == email).Select(u => u.Id).FirstOrDefault();
+            return await _context.Users
+                .Where(u => u.Email == email)
+                .Select(u => u.Id)
+                .FirstOrDefaultAsync();
         }
     }
 }

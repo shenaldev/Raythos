@@ -26,10 +26,10 @@ namespace Raythos.Controllers.Private
 
         // GET: api/user/addresses
         [HttpGet]
-        public ICollection<AddressDto>? GetAddresses()
+        public async Task<ICollection<AddressDto>?> GetAddresses()
         {
             JWTHelper jWTHelper = new(_userInterface);
-            long userID = jWTHelper.GetUserID(User);
+            long userID = await jWTHelper.GetUserID(User);
 
             if (userID == -1)
             {
@@ -55,7 +55,7 @@ namespace Raythos.Controllers.Private
 
         // POST: api/user/addresses
         [HttpPost]
-        public ActionResult<AddressDto>? PostAddress([FromForm] AddressDto address)
+        public async Task<ActionResult<AddressDto?>> PostAddress([FromForm] AddressDto address)
         {
             if (!ModelState.IsValid)
             {
@@ -69,7 +69,7 @@ namespace Raythos.Controllers.Private
             }
 
             JWTHelper jWTHelper = new(_userInterface);
-            long userID = jWTHelper.GetUserID(User);
+            long userID = await jWTHelper.GetUserID(User);
             address.UserId = userID;
             AddressDto newAddress = _addressInterface.CreateAddress(address);
 
@@ -83,7 +83,7 @@ namespace Raythos.Controllers.Private
 
         // PUT: api/user/addresses/5
         [HttpPut("{id}")]
-        public IActionResult PutAddress(long id, [FromForm] AddressDto address)
+        public async Task<IActionResult> PutAddress(long id, [FromForm] AddressDto address)
         {
             if (!ModelState.IsValid)
             {
@@ -102,7 +102,7 @@ namespace Raythos.Controllers.Private
             }
 
             JWTHelper jWTHelper = new(_userInterface);
-            long userID = jWTHelper.GetUserID(User);
+            long userID = await jWTHelper.GetUserID(User);
 
             if (!_addressInterface.IsAddressBelongsToUser(id, userID))
             {
@@ -121,7 +121,7 @@ namespace Raythos.Controllers.Private
 
         // DELETE: api/user/addresses/5
         [HttpDelete("{id}")]
-        public IActionResult DeleteAddress(long id)
+        public async Task<IActionResult> DeleteAddress(long id)
         {
             if (!_addressInterface.IsAddressExists(id))
             {
@@ -129,7 +129,7 @@ namespace Raythos.Controllers.Private
             }
 
             JWTHelper jWTHelper = new(_userInterface);
-            long userID = jWTHelper.GetUserID(User);
+            long userID = await jWTHelper.GetUserID(User);
 
             if (!_addressInterface.IsAddressBelongsToUser(id, userID))
             {

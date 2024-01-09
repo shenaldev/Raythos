@@ -23,7 +23,7 @@ namespace Raythos.Controllers.Private
 
         //Get User Details
         [HttpGet]
-        public ActionResult<UserDto> GetUser()
+        public async Task<ActionResult<UserDto>> GetUser()
         {
             String? UserEmail = JWTHelper.GetEmailFromJWT(User);
 
@@ -32,13 +32,13 @@ namespace Raythos.Controllers.Private
                 return NotFound();
             }
 
-            var user = _mapper.Map<UserDto>(_userRepository.GetUser(UserEmail));
+            var user = _mapper.Map<UserDto>(await _userRepository.GetUser(UserEmail));
             return user;
         }
 
         //Update User Details
         [HttpPut]
-        public IActionResult PutUser([FromForm] UpdateUserDto user)
+        public async Task<IActionResult> PutUser([FromForm] UpdateUserDto user)
         {
             if (!ModelState.IsValid)
             {
@@ -52,17 +52,19 @@ namespace Raythos.Controllers.Private
                 return NotFound();
             }
 
-            if (!_userRepository.IsUserExists(UserEmail))
+            if (!await _userRepository.IsUserExists(UserEmail))
             {
                 return NotFound();
             }
 
-            if (!_userRepository.UpdateUser(user.Id, user))
+            var updatedUser = await _userRepository.UpdateUser(user.Id, user);
+
+            if (updatedUser == null)
             {
                 return BadRequest();
             }
 
-            return NoContent();
+            return Ok(_mapper.Map<UserDto>(updatedUser));
         }
     }
 }

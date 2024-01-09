@@ -29,10 +29,10 @@ namespace Raythos.Controllers.Private
 
         // GET: api/user/carts
         [HttpGet]
-        public ActionResult<ICollection<CartDto>> GetCarts()
+        public async Task<ActionResult<ICollection<CartDto>>> GetCarts()
         {
             JWTHelper jWTHelper = new(_userInterface);
-            long userID = jWTHelper.GetUserID(User);
+            long userID = await jWTHelper.GetUserID(User);
 
             ICollection<CartDto> result = _cartRepository.GetCarts(userID);
 
@@ -46,7 +46,7 @@ namespace Raythos.Controllers.Private
 
         // POST: api/user/carts
         [HttpPost]
-        public IActionResult PostCart([FromForm] CreateCartDto cart)
+        public async Task<IActionResult> PostCart([FromForm] CreateCartDto cart)
         {
             if (!ModelState.IsValid)
             {
@@ -60,7 +60,7 @@ namespace Raythos.Controllers.Private
                 return BadRequest(new { message = "Aircraft does not exist" });
 
             JWTHelper jWTHelper = new(_userInterface);
-            long userID = jWTHelper.GetUserID(User);
+            long userID = await jWTHelper.GetUserID(User);
             cart.UserId = userID;
 
             var result = _cartRepository.AddToCart(cart);
@@ -75,7 +75,7 @@ namespace Raythos.Controllers.Private
 
         // PUT: api/user/carts/5
         [HttpPut("{id}")]
-        public IActionResult PutCart(long id, [FromForm] CreateCartDto cart)
+        public async Task<IActionResult> PutCart(long id, [FromForm] CreateCartDto cart)
         {
             if (!ModelState.IsValid)
             {
@@ -89,7 +89,7 @@ namespace Raythos.Controllers.Private
                 return BadRequest(new { message = "Aircraft does not exist" });
 
             JWTHelper jWTHelper = new(_userInterface);
-            long userID = jWTHelper.GetUserID(User);
+            long userID = await jWTHelper.GetUserID(User);
             cart.UserId = userID;
 
             var result = _cartRepository.UpdateCart(id, cart);

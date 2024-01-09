@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Raythos.Models;
 using Raythos.Responses;
@@ -26,14 +27,14 @@ namespace Raythos.Controllers
         // POST: api/auth/login
         [HttpPost("login")]
         [AllowAnonymous]
-        public IActionResult Login([FromForm] string email, [FromForm] string password)
+        public async Task<IActionResult> Login([FromForm] string email, [FromForm] string password)
         {
             if (email == null || password == null)
             {
                 return BadRequest("Enter Email And Password");
             }
 
-            var user = _context.Users.FirstOrDefault(u => u.Email == email);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
 
             if (user == null)
             {
@@ -70,7 +71,7 @@ namespace Raythos.Controllers
         //POST: api/auth/register
         [HttpPost("register")]
         [AllowAnonymous]
-        public IActionResult Register([FromForm] User user)
+        public async Task<IActionResult> Register([FromForm] User user)
         {
             if (user == null)
             {
@@ -80,7 +81,9 @@ namespace Raythos.Controllers
             //CHECK IF USER ALREADY EXISTS
             if (user.Email != null)
             {
-                var isUserExits = _context.Users.FirstOrDefault(u => u.Email == user.Email);
+                var isUserExits = await _context.Users.FirstOrDefaultAsync(
+                    u => u.Email == user.Email
+                );
                 if (isUserExits != null)
                 {
                     return BadRequest("User already exists");
@@ -90,8 +93,8 @@ namespace Raythos.Controllers
             user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
             user.CreatedAt = DateTime.Now;
             user.UpdatedAt = DateTime.Now;
-            _context.Users.Add(user);
-            _context.SaveChanges();
+            await _context.Users.AddAsync(user);
+            await _context.SaveChangesAsync();
 
             string token = GenerateJwt(user, Configuration);
             var response = new LoginResponse

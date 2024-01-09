@@ -5,24 +5,24 @@ namespace Raythos.Interfaces
 {
     public interface IUserRepository
     {
-        ICollection<User> GetUsers(int skip, int take);
+        Task<ICollection<User>> GetUsers(int skip, int take);
 
-        User GetUser(long id);
+        Task<User?> GetUser(long id);
 
-        User GetUser(string email);
+        Task<User?> GetUser(string email);
 
-        User CreateUser(User user);
+        Task<User> CreateUser(User user);
 
-        bool UpdateUser(long id, UpdateUserDto user);
+        Task<User?> UpdateUser(long id, UpdateUserDto user);
 
-        bool DeleteUser(long id);
+        Task<bool> DeleteUser(long id);
 
-        bool IsUserExists(string email);
+        Task<bool> IsUserExists(string email);
 
-        bool IsUserExists(long id);
+        Task<bool> IsUserExists(long id);
 
-        int GetTotalUsers();
+        Task<int> GetTotalUsers();
 
-        long GetUserID(string email);
+        Task<long> GetUserID(string email);
     }
 }
