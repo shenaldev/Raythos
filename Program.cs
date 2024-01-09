@@ -24,6 +24,8 @@ builder.Services.AddScoped<ITeamInterface, TeamRepository>();
 builder.Services.AddScoped<ITeamMemberInterface, TeamMemberRepository>();
 builder.Services.AddScoped<IAircraftOptionInterface, AircraftOptionRepository>();
 builder.Services.AddScoped<ICartInterface, CartRepository>();
+builder.Services.AddScoped<IOrderInterface, OrderRepository>();
+builder.Services.AddScoped<IOrderItemInterface, OrderItemRepository>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

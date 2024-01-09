@@ -34,6 +34,16 @@ namespace Raythos.Utils
             CreateMap<CartDto, Cart>();
             CreateMap<Cart, CreateCartDto>();
             CreateMap<CreateCartDto, Cart>();
+
+            CreateMap<Order, OrderDto>();
+            CreateMap<OrderDto, Order>();
+            CreateMap<Order, CreateOrderDto>();
+            CreateMap<CreateOrderDto, Order>();
+
+            CreateMap<OrderItem, OrderItemDto>();
+            CreateMap<OrderItemDto, OrderItem>();
+            CreateMap<OrderItem, CreateOrderItemDto>();
+            CreateMap<CreateOrderItemDto, OrderItem>();
         }
     }
 }
