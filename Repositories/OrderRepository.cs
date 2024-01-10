@@ -38,17 +38,27 @@ namespace Raythos.Repositories
             return _mapper.Map<ICollection<OrderDto>>(
                 await _context.Orders
                     .Where(o => o.UserId == userId)
+                    .Include(o => o.Address)
                     .Skip(skip)
                     .Take(take)
                     .ToListAsync()
             );
         }
 
-        public async Task<OrderDto?> GetOrder(long id)
+        // Get Single Order Details For User
+        public async Task<SingleUserOrderDto?> GetOrder(long id)
         {
-            return _mapper.Map<OrderDto>(await _context.Orders.FindAsync(id));
+            return _mapper.Map<SingleUserOrderDto>(
+                await _context.Orders
+                    .Include(o => o.Address)
+                    .Include(o => o.OrderItems)
+                    .ThenInclude(oi => oi.Aircraft)
+                    .Where(o => o.Id == id)
+                    .FirstOrDefaultAsync()
+            );
         }
 
+        // Get Single Order Details For Admin
         public async Task<SingleOrderDto?> GetOrderAdmin(long id)
         {
             return _mapper.Map<SingleOrderDto>(
@@ -56,6 +66,7 @@ namespace Raythos.Repositories
                     .Include(o => o.User)
                     .Include(o => o.Address)
                     .Include(o => o.OrderItems)
+                    .ThenInclude(oi => oi.Aircraft)
                     .FirstOrDefaultAsync(o => o.Id == id)
             );
         }

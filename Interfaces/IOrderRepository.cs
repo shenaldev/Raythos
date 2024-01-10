@@ -8,7 +8,7 @@ namespace Raythos.Interfaces
 
         Task<ICollection<OrderDto>> GetOrdersByUserId(long userId, int skip, int take = 15);
 
-        Task<OrderDto?> GetOrder(long id);
+        Task<SingleUserOrderDto?> GetOrder(long id);
 
         Task<SingleOrderDto?> GetOrderAdmin(long id);
 

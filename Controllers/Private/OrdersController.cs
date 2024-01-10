@@ -55,7 +55,7 @@ namespace Raythos.Controllers.Private
 
         // GET: api/user/orders/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<OrderDto>> GetOrder(long id)
+        public async Task<ActionResult<SingleUserOrderDto>> GetOrder(long id)
         {
             JWTHelper jWTHelper = new(_userInterface);
             long userID = await jWTHelper.GetUserID(User);
@@ -65,7 +65,7 @@ namespace Raythos.Controllers.Private
                 return NotFound();
             }
 
-            OrderDto? order = await _orderRepository.GetOrder(id);
+            SingleUserOrderDto? order = await _orderRepository.GetOrder(id);
             if (order != null && order.UserId != userID)
             {
                 return Unauthorized();

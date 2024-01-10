@@ -54,11 +54,13 @@ namespace Raythos.Utils
             CreateMap<Order, CreateOrderDto>();
             CreateMap<CreateOrderDto, Order>();
             CreateMap<Order, SingleOrderDto>();
+            CreateMap<Order, SingleUserOrderDto>();
 
             CreateMap<OrderItem, OrderItemDto>();
             CreateMap<OrderItemDto, OrderItem>();
             CreateMap<OrderItem, CreateOrderItemDto>();
             CreateMap<CreateOrderItemDto, OrderItem>();
+            CreateMap<OrderItem, SingleOrderItemDto>();
         }
     }
 }

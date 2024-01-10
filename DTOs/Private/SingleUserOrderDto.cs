@@ -1,9 +1,8 @@
 ﻿using Raythos.DTOs.AddressDtos;
-using Raythos.Models;
 
 namespace Raythos.DTOs.Private
 {
-    public class SingleOrderDto
+    public class SingleUserOrderDto
     {
         public long Id { get; set; }
 
@@ -18,7 +17,6 @@ namespace Raythos.DTOs.Private
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
 
-        public UserDto User { get; set; } = null!;
         public AddressDto Address { get; set; } = null!;
         public ICollection<SingleOrderItemDto> OrderItems { get; set; } = null!;
     }
