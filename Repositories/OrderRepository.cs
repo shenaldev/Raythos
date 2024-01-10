@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Raythos.DTOs.Private;
 using Raythos.Interfaces;
 using Raythos.Models;
@@ -16,40 +17,34 @@ namespace Raythos.Repositories
             _mapper = mapper;
         }
 
-        public ICollection<OrderDto> GetOrders(int skip, int take = 15)
+        public async Task<ICollection<OrderDto>> GetOrders(int skip, int take = 15)
         {
-            return _mapper.Map<ICollection<OrderDto>>(_context.Orders.Skip(skip).Take(take));
+            return _mapper.Map<ICollection<OrderDto>>(await _context.Orders.Skip(skip).Take(take).ToListAsync());
         }
 
-        public ICollection<OrderDto> GetOrdersByUserId(long userId, int skip, int take = 15)
+        public async Task<ICollection<OrderDto>> GetOrdersByUserId(long userId, int skip, int take = 15)
         {
             return _mapper.Map<ICollection<OrderDto>>(
-                _context.Orders.Where(o => o.UserId == userId).Skip(skip).Take(take)
+                await _context.Orders.Where(o => o.UserId == userId).Skip(skip).Take(take).ToListAsync()
             );
         }
 
-        public OrderDto GetOrder(long id)
+        public async Task<OrderDto?> GetOrder(long id)
         {
-            return _mapper.Map<OrderDto>(_context.Orders.Find(id));
+            return _mapper.Map<OrderDto>(await _context.Orders.FindAsync(id));
         }
 
-        public OrderDto CreateOrder(CreateOrderDto order)
+        public async Task<OrderDto?> CreateOrder(CreateOrderDto order)
         {
             try
             {
                 Order newOrder = _mapper.Map<Order>(order);
                 newOrder.CreatedAt = DateTime.Now;
                 newOrder.UpdatedAt = DateTime.Now;
-                _context.Orders.Add(newOrder);
-                int IsSaved = _context.SaveChanges();
-                if (IsSaved > 0)
-                {
-                    return _mapper.Map<OrderDto>(newOrder);
-                }
-                else
-                {
-                    return null;
-                }
+
+                await _context.Orders.AddAsync(newOrder);
+                await _context.SaveChangesAsync();
+                return _mapper.Map<OrderDto>(newOrder);
             }
             catch
             {
@@ -57,34 +52,34 @@ namespace Raythos.Repositories
             }
         }
 
-        public OrderDto UpdateOrder(long id, CreateCartDto dto)
+        public Task<OrderDto?> UpdateOrder(long id, CreateCartDto dto)
         {
             throw new System.NotImplementedException();
         }
 
-        public bool UpdateOrderStatus(long id, string status)
+        public Task<bool> UpdateOrderStatus(long id, string status)
         {
             throw new System.NotImplementedException();
         }
 
-        public bool DeleteOrder(long id)
+        public Task<bool> DeleteOrder(long id)
         {
             throw new System.NotImplementedException();
         }
 
-        public bool OrderExists(long id)
+        public async Task<bool> OrderExists(long id)
         {
-            return _context.Orders.Any(o => o.Id == id);
+            return await _context.Orders.AnyAsync(o => o.Id == id);
         }
 
-        public int GetOrdersCount()
+        public async Task<int> GetOrdersCount()
         {
-            return _context.Orders.Count();
+            return await _context.Orders.CountAsync();
         }
 
-        public int GetOrdersCountByUserId(long userId)
+        public async Task<int> GetOrdersCountByUserId(long userId)
         {
-            return _context.Orders.Where(o => o.UserId == userId).Count();
+            return await _context.Orders.Where(o => o.UserId == userId).CountAsync();
         }
     }
 }

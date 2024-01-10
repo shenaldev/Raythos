@@ -15,14 +15,14 @@ namespace Raythos.Controllers.Private
         private readonly IOrderRepository _orderRepository;
         private readonly IUserRepository _userInterface;
         private readonly ICartRepository _cartRepository;
-        private readonly IOrderItemInterface _orderItemRepository;
+        private readonly IOrderItemRepository _orderItemRepository;
         private readonly int take = 15;
 
         public OrdersController(
             IOrderRepository orderRepository,
             IUserRepository userInterface,
             ICartRepository cartRepository,
-            IOrderItemInterface orderItemRepository
+            IOrderItemRepository orderItemRepository
         )
         {
             _orderRepository = orderRepository;
@@ -41,10 +41,10 @@ namespace Raythos.Controllers.Private
             long userID = await jWTHelper.GetUserID(User);
 
             var skip = (page - 1) * take;
-            int totalTeams = _orderRepository.GetOrdersCountByUserId(userID);
+            int totalTeams = await _orderRepository.GetOrdersCountByUserId(userID);
             int lastPage = (int)Math.Ceiling((double)totalTeams / take);
 
-            ICollection<OrderDto> orders = _orderRepository.GetOrdersByUserId(userID, skip, take);
+            ICollection<OrderDto> orders = await _orderRepository.GetOrdersByUserId(userID, skip, take);
             if (orders == null)
             {
                 return NotFound();
@@ -60,13 +60,13 @@ namespace Raythos.Controllers.Private
             JWTHelper jWTHelper = new(_userInterface);
             long userID = await jWTHelper.GetUserID(User);
 
-            if (!_orderRepository.OrderExists(id))
+            if (!await _orderRepository.OrderExists(id))
             {
                 return NotFound();
             }
 
-            OrderDto order = _orderRepository.GetOrder(id);
-            if (order.UserId != userID)
+            OrderDto? order = await _orderRepository.GetOrder(id);
+            if (order != null && order.UserId != userID)
             {
                 return Unauthorized();
             }
@@ -114,10 +114,10 @@ namespace Raythos.Controllers.Private
             }
 
             //Create Order Items
-            bool IsItemSaved = _orderItemRepository.AddOrderItem(result.Id, carts);
+            bool IsItemSaved = await _orderItemRepository.AddOrderItem(result.Id, carts);
             if (!IsItemSaved)
             {
-                _orderRepository.DeleteOrder(result.Id);
+                await _orderRepository.DeleteOrder(result.Id);
                 return StatusCode(500, new { message = "Something went wrong" });
             }
 

@@ -1,11 +1,12 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Raythos.DTOs.Private;
 using Raythos.Interfaces;
 using Raythos.Models;
 
 namespace Raythos.Repositories
 {
-    public class OrderItemRepository : IOrderItemInterface
+    public class OrderItemRepository : IOrderItemRepository
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
@@ -16,16 +17,16 @@ namespace Raythos.Repositories
             _mapper = mapper;
         }
 
-        public ICollection<OrderItemDto> GetOrderItems(long orderId)
+        public async Task<ICollection<OrderItemDto>> GetOrderItems(long orderId)
         {
             return _mapper.Map<ICollection<OrderItemDto>>(
-                _context.OrderItems.Where(oi => oi.OrderId == orderId)
+                await _context.OrderItems.Where(oi => oi.OrderId == orderId).ToListAsync()
             );
         }
 
-        public bool AddOrderItem(long orderId, ICollection<CartDto> cartItems)
+        public async Task<bool> AddOrderItem(long orderId, ICollection<CartDto> cartItems)
         {
-            using var transaction = _context.Database.BeginTransaction();
+            using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
                 foreach (var cartItem in cartItems)
@@ -34,15 +35,15 @@ namespace Raythos.Repositories
                     item.OrderId = orderId;
                     item.CreatedAt = DateTime.Now;
                     item.UpdatedAt = DateTime.Now;
-                    _context.OrderItems.Add(item);
+                    await _context.OrderItems.AddAsync(item);
                 }
-                _context.SaveChanges();
-                transaction.Commit();
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
                 return true;
             }
             catch
             {
-                transaction.Rollback();
+                await transaction.RollbackAsync();
                 return false;
             }
         }

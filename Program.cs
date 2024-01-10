@@ -39,7 +39,7 @@ builder.Services.AddScoped<ITeamMemberInterface, TeamMemberRepository>();
 builder.Services.AddScoped<IAircraftOptionRepository, AircraftOptionRepository>();
 builder.Services.AddScoped<ICartRepository, CartRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
-builder.Services.AddScoped<IOrderItemInterface, OrderItemRepository>();
+builder.Services.AddScoped<IOrderItemRepository, OrderItemRepository>();
 builder.Services.AddScoped<IForignkeyRepository, ForignkeyCheckRepository>();
 
 builder.Services.AddEndpointsApiExplorer();

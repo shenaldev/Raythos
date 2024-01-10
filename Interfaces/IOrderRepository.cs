@@ -4,24 +4,24 @@ namespace Raythos.Interfaces
 {
     public interface IOrderRepository
     {
-        ICollection<OrderDto> GetOrders(int skip, int take = 15);
+        Task<ICollection<OrderDto>> GetOrders(int skip, int take = 15);
 
-        ICollection<OrderDto> GetOrdersByUserId(long userId, int skip, int take = 15);
+        Task<ICollection<OrderDto>> GetOrdersByUserId(long userId, int skip, int take = 15);
 
-        OrderDto GetOrder(long id);
+        Task<OrderDto?> GetOrder(long id);
 
-        OrderDto CreateOrder(CreateOrderDto dto);
+        Task<OrderDto?> CreateOrder(CreateOrderDto dto);
 
-        OrderDto UpdateOrder(long id, CreateCartDto dto);
+        Task<OrderDto?> UpdateOrder(long id, CreateCartDto dto);
 
-        bool UpdateOrderStatus(long id, string status);
+        Task<bool> UpdateOrderStatus(long id, string status);
 
-        bool DeleteOrder(long id);
+        Task<bool> DeleteOrder(long id);
 
-        bool OrderExists(long id);
+        Task<bool> OrderExists(long id);
 
-        int GetOrdersCount();
+        Task<int> GetOrdersCount();
 
-        int GetOrdersCountByUserId(long userId);
+        Task<int> GetOrdersCountByUserId(long userId);
     }
 }
