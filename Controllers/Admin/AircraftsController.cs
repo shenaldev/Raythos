@@ -134,6 +134,29 @@ namespace Raythos.Controllers.Admin
             }
         }
 
+        // PUT: api/dashboard/admin/aircraft/status/5
+        [HttpPut("status/{id}")]
+        public async Task<ActionResult> PutAircraftStatusAsync(long id, [FromForm] string status)
+        {
+            if (!await _aircraftRepository.IsAircraftExists(id))
+            {
+                return NotFound();
+            }
+
+            if (status == null || status == "")
+            {
+                return BadRequest("Status is required");
+            }
+
+            bool isUpdated = await _aircraftRepository.UpdateAircraftStatus(id, status);
+            if (!isUpdated)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+
+            return Ok();
+        }
+
         // DELETE: api/dashboard/admin/aircraft/5
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteAircraftAsync(long id)

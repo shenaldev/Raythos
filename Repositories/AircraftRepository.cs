@@ -81,6 +81,25 @@ namespace Raythos.Repositories
             }
         }
 
+        public async Task<bool> UpdateAircraftStatus(long id, string status)
+        {
+            try
+            {
+                Aircraft? aircraft = await _context.Aircrafts.FindAsync(id);
+                if (aircraft == null)
+                    return false;
+
+                aircraft.Status = status;
+                aircraft.UpdatedAt = DateTime.Now;
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         public async Task<bool> DeleteAircraft(long id)
         {
             try

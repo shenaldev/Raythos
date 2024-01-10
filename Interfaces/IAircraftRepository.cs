@@ -12,6 +12,8 @@ namespace Raythos.Interfaces
 
         Task<AircraftDto?> UpdateAircraft(long id, AircraftDto aircraft);
 
+        Task<bool> UpdateAircraftStatus(long id, string status);
+
         Task<bool> DeleteAircraft(long id);
 
         Task<bool> IsAircraftExists(long id);
