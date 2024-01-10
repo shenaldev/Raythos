@@ -91,6 +91,26 @@ namespace Raythos.Repositories
             }
         }
 
+        public async Task<bool> ClearCart(long userId)
+        {
+            try
+            {
+                ICollection<Cart> cartItems = await _context.Carts
+                    .Where(c => c.UserId == userId)
+                    .ToListAsync();
+                if (cartItems.Count == 0)
+                    return false;
+
+                _context.Carts.RemoveRange(cartItems);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         public async Task<bool> IsCartExists(long userId, long aircraftId)
         {
             return await _context.Carts.AnyAsync(

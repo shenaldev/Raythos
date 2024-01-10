@@ -14,6 +14,8 @@ namespace Raythos.Interfaces
 
         Task<bool> DeleteCart(long id);
 
+        Task<bool> ClearCart(long userId);
+
         Task<bool> IsCartExists(long userId, long aircraftId);
 
         Task<bool> IsCartExists(long id);

@@ -121,5 +121,21 @@ namespace Raythos.Controllers.Private
                 return StatusCode(HttpStatusCode.InternalServerError.GetHashCode());
             }
         }
+
+        // DELETE: api/user/carts
+        [HttpDelete]
+        public async Task<IActionResult> ClearCart()
+        {
+            JWTHelper jWTHelper = new(_userRepository);
+            long userID = await jWTHelper.GetUserID(User);
+
+            bool isDeleted = await _cartRepository.ClearCart(userID);
+            if (!isDeleted)
+            {
+                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode());
+            }
+
+            return Ok("Cart has been cleared");
+        }
     }
 }

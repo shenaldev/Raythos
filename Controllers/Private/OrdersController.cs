@@ -142,8 +142,11 @@ namespace Raythos.Controllers.Private
                         );
                     }
                 }
-
+                //Commit Transaction
                 await transaction.CommitAsync();
+
+                //Clear Cart
+                await _cartRepository.ClearCart(userID);
 
                 return CreatedAtAction("GetOrder", new { id = newOrder.Id }, newOrder);
             }
