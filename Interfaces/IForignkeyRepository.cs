@@ -13,5 +13,9 @@ namespace Raythos.Interfaces
         Task<bool> IsCartExists(long userId, long aircraftId);
 
         Task<bool> IsTeamExists(long id);
+
+        Task<bool> IsCategoryExists(int id);
+
+        Task<bool> IsCategoryExists(string slug);
     }
 }

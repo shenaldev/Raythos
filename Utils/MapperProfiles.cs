@@ -2,6 +2,7 @@
 using Raythos.DTOs;
 using Raythos.DTOs.Address;
 using Raythos.DTOs.Aircrafts;
+using Raythos.DTOs.Categories;
 using Raythos.DTOs.Private;
 using Raythos.Models;
 
@@ -18,6 +19,14 @@ namespace Raythos.Utils
             CreateMap<AddressDto, Address>();
             CreateMap<Address, UpdateAddressDto>();
             CreateMap<UpdateAddressDto, Address>();
+
+            //Categories Mapping
+            CreateMap<Category, CategoryDto>();
+            CreateMap<CategoryDto, Category>();
+            CreateMap<Category, CreateCategoryDto>();
+            CreateMap<CreateCategoryDto, Category>();
+            CreateMap<Category, UpdateCategoryDto>();
+            CreateMap<UpdateCategoryDto, Category>();
 
             // Aircrafts
             CreateMap<Aircraft, AircraftDto>();

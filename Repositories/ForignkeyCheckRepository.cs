@@ -43,5 +43,15 @@ namespace Raythos.Repositories
         {
             return await _context.Addresses.AnyAsync(e => e.AddressID == id);
         }
+
+        public async Task<bool> IsCategoryExists(int id)
+        {
+            return await _context.Categories.AnyAsync(e => e.Id == id);
+        }
+
+        public async Task<bool> IsCategoryExists(string slug)
+        {
+            return await _context.Categories.AnyAsync(e => e.Slug == slug);
+        }
     }
 }
