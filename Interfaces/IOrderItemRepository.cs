@@ -6,6 +6,6 @@ namespace Raythos.Interfaces
     {
         Task<ICollection<OrderItemDto>> GetOrderItems(long orderId);
 
-        Task<bool> AddOrderItem(long orderId, ICollection<CartDto> cartItems);
+        Task<bool> AddOrderItem(long orderId, CartDto cartItem);
     }
 }

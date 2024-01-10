@@ -4,9 +4,9 @@ namespace Raythos.Interfaces
 {
     public interface ICartRepository
     {
-        Task<ICollection<CartDto>> GetCarts(long userID);
+        Task<ICollection<CartDto>> GetCartItems(long userID);
 
-        Task<CartDto?> GetCart(long id);
+        Task<CartDto?> GetCartItem(long id);
 
         Task<CartDto?> AddToCart(CreateCartDto cart);
 

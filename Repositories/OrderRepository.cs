@@ -19,13 +19,23 @@ namespace Raythos.Repositories
 
         public async Task<ICollection<OrderDto>> GetOrders(int skip, int take = 15)
         {
-            return _mapper.Map<ICollection<OrderDto>>(await _context.Orders.Skip(skip).Take(take).ToListAsync());
+            return _mapper.Map<ICollection<OrderDto>>(
+                await _context.Orders.Skip(skip).Take(take).ToListAsync()
+            );
         }
 
-        public async Task<ICollection<OrderDto>> GetOrdersByUserId(long userId, int skip, int take = 15)
+        public async Task<ICollection<OrderDto>> GetOrdersByUserId(
+            long userId,
+            int skip,
+            int take = 15
+        )
         {
             return _mapper.Map<ICollection<OrderDto>>(
-                await _context.Orders.Where(o => o.UserId == userId).Skip(skip).Take(take).ToListAsync()
+                await _context.Orders
+                    .Where(o => o.UserId == userId)
+                    .Skip(skip)
+                    .Take(take)
+                    .ToListAsync()
             );
         }
 

@@ -34,7 +34,7 @@ namespace Raythos.Controllers.Private
             JWTHelper jWTHelper = new(_userRepository);
             long userID = await jWTHelper.GetUserID(User);
 
-            ICollection<CartDto> result = await _cartRepository.GetCarts(userID);
+            ICollection<CartDto> result = await _cartRepository.GetCartItems(userID);
 
             if (result == null)
             {

@@ -10,26 +10,22 @@ namespace Raythos.Controllers.Private
     [Route("api/user/orders")]
     [ApiController]
     [Authorize]
-    public class OrdersController : ControllerBase
+    public class OrdersController(
+        IOrderRepository orderRepository,
+        IUserRepository userInterface,
+        ICartRepository cartRepository,
+        IOrderItemRepository orderItemRepository,
+        IForignkeyRepository forignkeyRepository,
+        ApplicationDbContext context
+    ) : ControllerBase
     {
-        private readonly IOrderRepository _orderRepository;
-        private readonly IUserRepository _userInterface;
-        private readonly ICartRepository _cartRepository;
-        private readonly IOrderItemRepository _orderItemRepository;
+        private readonly IOrderRepository _orderRepository = orderRepository;
+        private readonly IUserRepository _userInterface = userInterface;
+        private readonly ICartRepository _cartRepository = cartRepository;
+        private readonly IOrderItemRepository _orderItemRepository = orderItemRepository;
+        private readonly IForignkeyRepository _forignkeyRepository = forignkeyRepository;
+        private readonly ApplicationDbContext _contex = context;
         private readonly int take = 15;
-
-        public OrdersController(
-            IOrderRepository orderRepository,
-            IUserRepository userInterface,
-            ICartRepository cartRepository,
-            IOrderItemRepository orderItemRepository
-        )
-        {
-            _orderRepository = orderRepository;
-            _userInterface = userInterface;
-            _cartRepository = cartRepository;
-            _orderItemRepository = orderItemRepository;
-        }
 
         // GET: api/user/orders
         [HttpGet]
@@ -44,7 +40,11 @@ namespace Raythos.Controllers.Private
             int totalTeams = await _orderRepository.GetOrdersCountByUserId(userID);
             int lastPage = (int)Math.Ceiling((double)totalTeams / take);
 
-            ICollection<OrderDto> orders = await _orderRepository.GetOrdersByUserId(userID, skip, take);
+            ICollection<OrderDto> orders = await _orderRepository.GetOrdersByUserId(
+                userID,
+                skip,
+                take
+            );
             if (orders == null)
             {
                 return NotFound();
@@ -83,45 +83,78 @@ namespace Raythos.Controllers.Private
                 return BadRequest(ModelState);
             }
 
-            //if (order.AddressId)
+            if (order.AddressId == null)
+            {
+                ModelState.AddModelError("AddressId", "Address is required");
+                return BadRequest(ModelState);
+            }
+
+            if (!await _forignkeyRepository.IsAddressExists((long)order.AddressId))
+            {
+                ModelState.AddModelError("AddressId", "Address does not exists");
+                return BadRequest(ModelState);
+            }
 
             //GET USER ID
             JWTHelper jWTHelper = new(_userInterface);
             long userID = await jWTHelper.GetUserID(User);
 
             //GET CART ITEMS
-            ICollection<CartDto> carts = await _cartRepository.GetCarts(userID);
-            if (carts == null)
+            ICollection<CartDto> cartItems = await _cartRepository.GetCartItems(userID);
+            if (cartItems == null)
                 return BadRequest(new { message = "No items in cart" });
 
             //CALCULATE TOTAL PRICE
             decimal total = 0;
-            foreach (var cart in carts)
+            foreach (var item in cartItems)
             {
-                if (cart.TotalPrice == null)
+                if (item.TotalPrice == null)
                     return BadRequest(new { message = "Total price is required" });
-                total += (decimal)cart.TotalPrice;
+                total += (decimal)item.TotalPrice;
             }
 
             //CREATE ORDER
             order.UserId = userID;
             order.Total = total;
-            var result = _orderRepository.CreateOrder(order);
 
-            if (result == null)
+            using var transaction = _contex.Database.BeginTransaction();
+            try
             {
-                return BadRequest(new { message = "Fail to create order" });
-            }
+                var newOrder = await _orderRepository.CreateOrder(order);
 
-            //Create Order Items
-            bool IsItemSaved = await _orderItemRepository.AddOrderItem(result.Id, carts);
-            if (!IsItemSaved)
+                if (newOrder == null)
+                {
+                    return StatusCode(
+                        StatusCodes.Status500InternalServerError,
+                        new { message = "Something went wrong" }
+                    );
+                }
+
+                foreach (var item in cartItems)
+                {
+                    var newItem = await _orderItemRepository.AddOrderItem((long)newOrder.Id, item);
+                    if (newItem == false)
+                    {
+                        await transaction.RollbackAsync();
+                        return StatusCode(
+                            StatusCodes.Status500InternalServerError,
+                            new { message = "Something went wrong" }
+                        );
+                    }
+                }
+
+                await transaction.CommitAsync();
+
+                return CreatedAtAction("GetOrder", new { id = newOrder.Id }, newOrder);
+            }
+            catch
             {
-                await _orderRepository.DeleteOrder(result.Id);
-                return StatusCode(500, new { message = "Something went wrong" });
+                await transaction.RollbackAsync();
+                return StatusCode(
+                    StatusCodes.Status500InternalServerError,
+                    new { message = "Something went wrong" }
+                );
             }
-
-            return Ok(result);
         }
     }
 }

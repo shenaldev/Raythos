@@ -24,26 +24,35 @@ namespace Raythos.Repositories
             );
         }
 
-        public async Task<bool> AddOrderItem(long orderId, ICollection<CartDto> cartItems)
+        public async Task<bool> AddOrderItem(long orderId, CartDto cartItem)
         {
-            using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
-                foreach (var cartItem in cartItems)
-                {
-                    OrderItem item = _mapper.Map<OrderItem>(cartItem);
-                    item.OrderId = orderId;
-                    item.CreatedAt = DateTime.Now;
-                    item.UpdatedAt = DateTime.Now;
-                    await _context.OrderItems.AddAsync(item);
-                }
+                if (
+                    cartItem.AircraftId == null
+                    || cartItem.Quantity == null
+                    || cartItem.TotalPrice == null
+                )
+                    return false;
+
+                OrderItem item =
+                    new()
+                    {
+                        OrderId = orderId,
+                        AircraftId = (long)cartItem.AircraftId,
+                        Quantity = (int)cartItem.Quantity,
+                        TotalPrice = (decimal)cartItem.TotalPrice,
+                        Customizations = cartItem.Customizations,
+                        CreatedAt = DateTime.Now,
+                        UpdatedAt = DateTime.Now
+                    };
+
+                await _context.OrderItems.AddAsync(item);
                 await _context.SaveChangesAsync();
-                await transaction.CommitAsync();
                 return true;
             }
             catch
             {
-                await transaction.RollbackAsync();
                 return false;
             }
         }

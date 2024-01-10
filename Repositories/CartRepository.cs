@@ -17,17 +17,23 @@ namespace Raythos.Repositories
             _mapper = mapper;
         }
 
-        public async Task<ICollection<CartDto>> GetCarts(long userID)
+        public async Task<ICollection<CartDto>> GetCartItems(long userID)
         {
             return _mapper.Map<ICollection<CartDto>>(
-                await _context.Carts.Include(c => c.Aircraft).Where(c => c.UserId == userID).ToListAsync()
+                await _context.Carts
+                    .Include(c => c.Aircraft)
+                    .Where(c => c.UserId == userID)
+                    .ToListAsync()
             );
         }
 
-        public async Task<CartDto?> GetCart(long id)
+        public async Task<CartDto?> GetCartItem(long id)
         {
             return _mapper.Map<CartDto>(
-                await _context.Carts.Include(c => c.Aircraft).Where(c => c.Id == id).FirstOrDefaultAsync()
+                await _context.Carts
+                    .Include(c => c.Aircraft)
+                    .Where(c => c.Id == id)
+                    .FirstOrDefaultAsync()
             );
         }
 
@@ -87,7 +93,9 @@ namespace Raythos.Repositories
 
         public async Task<bool> IsCartExists(long userId, long aircraftId)
         {
-            return await _context.Carts.AnyAsync(c => c.UserId == userId && c.AircraftId == aircraftId);
+            return await _context.Carts.AnyAsync(
+                c => c.UserId == userId && c.AircraftId == aircraftId
+            );
         }
 
         public async Task<bool> IsCartExists(long id)
