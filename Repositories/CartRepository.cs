@@ -17,21 +17,21 @@ namespace Raythos.Repositories
             _mapper = mapper;
         }
 
-        public ICollection<CartDto> GetCarts(long userID)
+        public async Task<ICollection<CartDto>> GetCarts(long userID)
         {
             return _mapper.Map<ICollection<CartDto>>(
-                _context.Carts.Include(c => c.Aircraft).Where(c => c.UserId == userID).ToList()
+                await _context.Carts.Include(c => c.Aircraft).Where(c => c.UserId == userID).ToListAsync()
             );
         }
 
-        public CartDto GetCart(long id)
+        public async Task<CartDto?> GetCart(long id)
         {
             return _mapper.Map<CartDto>(
-                _context.Carts.Include(c => c.Aircraft).Where(c => c.Id == id).FirstOrDefault()
+                await _context.Carts.Include(c => c.Aircraft).Where(c => c.Id == id).FirstOrDefaultAsync()
             );
         }
 
-        public CartDto AddToCart(CreateCartDto cart)
+        public async Task<CartDto?> AddToCart(CreateCartDto cart)
         {
             try
             {
@@ -39,15 +39,9 @@ namespace Raythos.Repositories
                 cart.UpdatedAt = DateTime.Now;
 
                 Cart newItem = _mapper.Map<Cart>(cart);
-                _context.Carts.Add(newItem);
-                int IsSaved = _context.SaveChanges();
-                if (IsSaved == 0)
-                    return null;
-
-                // Get the newly added item with the aircraft details
-                CartDto newlyAddedItem = GetCart(newItem.Id);
-
-                return newlyAddedItem;
+                await _context.Carts.AddAsync(newItem);
+                await _context.SaveChangesAsync();
+                return _mapper.Map<CartDto>(newItem);
             }
             catch
             {
@@ -55,19 +49,17 @@ namespace Raythos.Repositories
             }
         }
 
-        public CartDto UpdateCart(long id, CreateCartDto cart)
+        public async Task<CartDto?> UpdateCart(long id, CreateCartDto cart)
         {
             try
             {
                 cart.Id = id;
                 Cart updatedItem = _mapper.Map<Cart>(cart);
                 updatedItem.UpdatedAt = System.DateTime.Now;
-                _context.Carts.Update(updatedItem);
-                int IsSaved = _context.SaveChanges();
-                if (IsSaved == 0)
-                    return null;
 
-                return GetCart(id);
+                _context.Entry(updatedItem).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+                return _mapper.Map<CartDto>(updatedItem);
             }
             catch
             {
@@ -75,17 +67,17 @@ namespace Raythos.Repositories
             }
         }
 
-        public bool DeleteCart(long id)
+        public async Task<bool> DeleteCart(long id)
         {
             try
             {
-                Cart? cartItem = _context.Carts.Find(id);
+                Cart? cartItem = await _context.Carts.FindAsync(id);
                 if (cartItem == null)
                     return false;
 
                 _context.Carts.Remove(cartItem);
-                int IsSaved = _context.SaveChanges();
-                return IsSaved > 0;
+                await _context.SaveChangesAsync();
+                return true;
             }
             catch
             {
@@ -93,19 +85,19 @@ namespace Raythos.Repositories
             }
         }
 
-        public bool IsCartExists(long userId, long aircraftId)
+        public async Task<bool> IsCartExists(long userId, long aircraftId)
         {
-            return _context.Carts.Any(c => c.UserId == userId && c.AircraftId == aircraftId);
+            return await _context.Carts.AnyAsync(c => c.UserId == userId && c.AircraftId == aircraftId);
         }
 
-        public bool IsCartExists(long id)
+        public async Task<bool> IsCartExists(long id)
         {
-            return _context.Carts.Any(c => c.Id == id);
+            return await _context.Carts.AnyAsync(c => c.Id == id);
         }
 
-        public int GetTotalCarts()
+        public async Task<int> GetTotalCarts()
         {
-            return _context.Carts.Count();
+            return await _context.Carts.CountAsync();
         }
     }
 }

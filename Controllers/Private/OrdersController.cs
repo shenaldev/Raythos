@@ -90,7 +90,7 @@ namespace Raythos.Controllers.Private
             long userID = await jWTHelper.GetUserID(User);
 
             //GET CART ITEMS
-            ICollection<CartDto> carts = _cartRepository.GetCarts(userID);
+            ICollection<CartDto> carts = await _cartRepository.GetCarts(userID);
             if (carts == null)
                 return BadRequest(new { message = "No items in cart" });
 

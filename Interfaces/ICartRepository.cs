@@ -4,20 +4,20 @@ namespace Raythos.Interfaces
 {
     public interface ICartRepository
     {
-        public ICollection<CartDto> GetCarts(long userID);
+        Task<ICollection<CartDto>> GetCarts(long userID);
 
-        public CartDto GetCart(long id);
+        Task<CartDto?> GetCart(long id);
 
-        public CartDto AddToCart(CreateCartDto cart);
+        Task<CartDto?> AddToCart(CreateCartDto cart);
 
-        public CartDto UpdateCart(long id, CreateCartDto cart);
+        Task<CartDto?> UpdateCart(long id, CreateCartDto cart);
 
-        public bool DeleteCart(long id);
+        Task<bool> DeleteCart(long id);
 
-        public bool IsCartExists(long userId, long aircraftId);
+        Task<bool> IsCartExists(long userId, long aircraftId);
 
-        public bool IsCartExists(long id);
+        Task<bool> IsCartExists(long id);
 
-        public int GetTotalCarts();
+        Task<int> GetTotalCarts();
     }
 }

@@ -13,28 +13,28 @@ namespace Raythos.Controllers.Private
     public class CartsController : ControllerBase
     {
         private readonly ICartRepository _cartRepository;
-        private readonly IUserRepository _userInterface;
-        private readonly IAircraftRepository _aircraftInterface;
+        private readonly IForignkeyRepository _forignkeyRepository;
+        private readonly IUserRepository _userRepository;
 
         public CartsController(
             ICartRepository cartRepository,
-            IUserRepository userInterface,
-            IAircraftRepository aircraftInterface
+            IForignkeyRepository forignkeyRepository,
+            IUserRepository userRepository
         )
         {
             _cartRepository = cartRepository;
-            _userInterface = userInterface;
-            _aircraftInterface = aircraftInterface;
+            _forignkeyRepository = forignkeyRepository;
+            _userRepository = userRepository;
         }
 
         // GET: api/user/carts
         [HttpGet]
         public async Task<ActionResult<ICollection<CartDto>>> GetCarts()
         {
-            JWTHelper jWTHelper = new(_userInterface);
+            JWTHelper jWTHelper = new(_userRepository);
             long userID = await jWTHelper.GetUserID(User);
 
-            ICollection<CartDto> result = _cartRepository.GetCarts(userID);
+            ICollection<CartDto> result = await _cartRepository.GetCarts(userID);
 
             if (result == null)
             {
@@ -56,14 +56,14 @@ namespace Raythos.Controllers.Private
             if (cart.AircraftId == null)
                 return BadRequest(new { message = "Aircraft ID is required" });
 
-            if (!await _aircraftInterface.IsAircraftExists((long)cart.AircraftId))
+            if (!await _forignkeyRepository.IsAircraftExists((long)cart.AircraftId))
                 return BadRequest(new { message = "Aircraft does not exist" });
 
-            JWTHelper jWTHelper = new(_userInterface);
+            JWTHelper jWTHelper = new(_userRepository);
             long userID = await jWTHelper.GetUserID(User);
             cart.UserId = userID;
 
-            var result = _cartRepository.AddToCart(cart);
+            var result = await _cartRepository.AddToCart(cart);
 
             if (result == null)
             {
@@ -85,14 +85,14 @@ namespace Raythos.Controllers.Private
             if (cart.AircraftId == null)
                 return BadRequest(new { message = "Aircraft ID is required" });
 
-            if (!await _aircraftInterface.IsAircraftExists((long)cart.AircraftId))
+            if (!await _forignkeyRepository.IsAircraftExists((long)cart.AircraftId))
                 return BadRequest(new { message = "Aircraft does not exist" });
 
-            JWTHelper jWTHelper = new(_userInterface);
+            JWTHelper jWTHelper = new(_userRepository);
             long userID = await jWTHelper.GetUserID(User);
             cart.UserId = userID;
 
-            var result = _cartRepository.UpdateCart(id, cart);
+            var result = await _cartRepository.UpdateCart(id, cart);
 
             if (result == null)
             {
@@ -104,14 +104,14 @@ namespace Raythos.Controllers.Private
 
         // DELETE: api/user/carts/5
         [HttpDelete("{id}")]
-        public IActionResult DeleteCart(long id)
+        public async Task<IActionResult> DeleteCart(long id)
         {
-            if (!_cartRepository.IsCartExists(id))
+            if (!await _cartRepository.IsCartExists(id))
             {
                 return NotFound();
             }
 
-            bool isDeleted = _cartRepository.DeleteCart(id);
+            bool isDeleted = await _cartRepository.DeleteCart(id);
             if (isDeleted)
             {
                 return Ok("Item has been deleted");
