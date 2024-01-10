@@ -20,7 +20,12 @@ namespace Raythos.Repositories
         public async Task<ICollection<AircraftDto>> GetAircrafts(int skip, int take = 15)
         {
             return _mapper.Map<ICollection<AircraftDto>>(
-                await _context.Aircrafts.Skip(skip).Take(take).OrderBy(a => a.Id).ToListAsync()
+                await _context.Aircrafts
+                    .Include(a => a.Category)
+                    .Skip(skip)
+                    .Take(take)
+                    .OrderBy(a => a.Id)
+                    .ToListAsync()
             );
         }
 
@@ -29,6 +34,7 @@ namespace Raythos.Repositories
             return _mapper.Map<AircraftSingleDto>(
                 await _context.Aircrafts
                     .Where(a => a.Id == id)
+                    .Include(a => a.Category)
                     .Include(a => a.Team)
                     .Include(a => a.AircraftOptions)
                     .FirstOrDefaultAsync()

@@ -18,9 +18,11 @@ namespace Raythos.DTOs.Aircrafts
         public string Description { get; set; } = null!;
         public string? Slug { get; set; }
         public long? TeamId { get; set; }
+        public int? CategoryId { get; set; }
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
 
+        public Category? Category { get; set; }
         public Team? Team { get; set; }
         public ICollection<AircraftOptionDto>? AircraftOptions { get; set; }
     }

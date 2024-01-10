@@ -14,17 +14,17 @@ namespace Raythos.Controllers.Admin
     {
         private readonly IAircraftRepository _aircraftRepository;
         private readonly IAircraftOptionRepository _aircraftOptionsRepository;
-        private readonly ITeamRepository _teamRepository;
+        private readonly IForignkeyRepository _forignkeyRepository;
 
         public AircraftsController(
             IAircraftRepository aircraftRepository,
             IAircraftOptionRepository aircraftOptionsRepository,
-            ITeamRepository teamRepository
+            IForignkeyRepository forignkeyRepository
         )
         {
             _aircraftRepository = aircraftRepository;
             _aircraftOptionsRepository = aircraftOptionsRepository;
-            _teamRepository = teamRepository;
+            _forignkeyRepository = forignkeyRepository;
         }
 
         // GET: api/dashboard/admin/aircraft
@@ -74,11 +74,17 @@ namespace Raythos.Controllers.Admin
             if (aircraft.TeamId == null)
                 return BadRequest(new { message = "Team ID is required" });
 
+            if (aircraft.CategoryId == null)
+                return BadRequest(new { message = "Category ID is required" });
+
             if (await _aircraftRepository.IsTeamAssigned((long)aircraft.TeamId))
                 return BadRequest(new { message = "Team is already assigned to another aircraft" });
 
-            if (!_teamRepository.IsTeamExists((long)aircraft.TeamId))
+            if (!await _forignkeyRepository.IsTeamExists((long)aircraft.TeamId))
                 return BadRequest(new { message = "Team does not exist" });
+
+            if (!await _forignkeyRepository.IsCategoryExists((int)aircraft.CategoryId))
+                return BadRequest(new { message = "Category does not exist" });
 
             // Create Slug
             string slug = aircraft.Model.ToLower().Replace(" ", "-") + aircraft.SerialNumber;

@@ -29,9 +29,14 @@ namespace Raythos.DTOs.Aircrafts
 
         [Required]
         public long? TeamId { get; set; }
+
+        [Required]
+        public int? CategoryId { get; set; }
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
 
         public Team? Team { get; set; }
+
+        public Category? Category { get; set; }
     }
 }
