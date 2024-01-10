@@ -12,6 +12,7 @@ namespace Raythos
         public DbSet<User> Users { get; set; }
         public DbSet<Country> Countries { get; set; }
         public DbSet<Address> Addresses { get; set; }
+        public DbSet<Category> Categories { get; set; }
         public DbSet<Aircraft> Aircrafts { get; set; }
         public DbSet<AircraftOption> AircraftOptions { get; set; }
         public DbSet<Team> Teams { get; set; }
@@ -30,6 +31,9 @@ namespace Raythos
             modelBuilder.ApplyConfiguration(new CountriesTableSeeder());
 
             modelBuilder.Entity<Address>().Property(a => a.AddressID).ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<Category>().Property(c => c.Id).ValueGeneratedOnAdd();
+            modelBuilder.ApplyConfiguration(new CategoriesTableSeeder());
 
             modelBuilder.Entity<Aircraft>().Property(a => a.Id).ValueGeneratedOnAdd();
 

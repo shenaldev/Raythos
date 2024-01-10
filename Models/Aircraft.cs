@@ -53,6 +53,10 @@ namespace Raythos.Models
         [ForeignKey("Team")]
         public long TeamId { get; set; }
 
+        [Required]
+        [ForeignKey("Category")]
+        public int CategoryId { get; set; }
+
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
 
@@ -61,5 +65,8 @@ namespace Raythos.Models
 
         [JsonIgnore]
         public ICollection<AircraftOption> AircraftOptions { get; } = new List<AircraftOption>();
+
+        [JsonIgnore]
+        public Category Category { get; set; } = null!;
     }
 }
