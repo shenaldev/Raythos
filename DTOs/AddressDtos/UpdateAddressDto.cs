@@ -1,4 +1,4 @@
-﻿namespace Raythos.DTOs.Address
+﻿namespace Raythos.DTOs.AddressDtos
 {
     public class UpdateAddressDto
     {

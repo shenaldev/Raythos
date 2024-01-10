@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using Raythos.DTOs;
-using Raythos.DTOs.Address;
+using Raythos.DTOs.AddressDtos;
 using Raythos.Interfaces;
 using Raythos.Models;
 

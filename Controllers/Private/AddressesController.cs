@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Raythos.DTOs;
-using Raythos.DTOs.Address;
+using Raythos.DTOs.AddressDtos;
 using Raythos.Interfaces;
 using Raythos.Models;
 using Raythos.Utils;

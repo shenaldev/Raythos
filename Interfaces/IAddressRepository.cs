@@ -1,5 +1,4 @@
-﻿using Raythos.DTOs;
-using Raythos.DTOs.Address;
+﻿using Raythos.DTOs.AddressDtos;
 using Raythos.Models;
 
 namespace Raythos.Interfaces
