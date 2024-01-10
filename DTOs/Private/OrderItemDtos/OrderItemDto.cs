@@ -1,8 +1,6 @@
-﻿using Raythos.DTOs.Aircrafts;
-
-namespace Raythos.DTOs.Private
+﻿namespace Raythos.DTOs.Private.OrderItemDtos
 {
-    public class SingleOrderItemDto
+    public class OrderItemDto
     {
         public long Id { get; set; }
         public long OrderId { get; set; }
@@ -12,7 +10,5 @@ namespace Raythos.DTOs.Private
         public string? Customizations { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
-
-        public AircraftDto? Aircraft { get; set; }
     }
 }

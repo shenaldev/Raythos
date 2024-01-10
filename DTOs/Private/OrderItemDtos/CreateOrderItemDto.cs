@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Raythos.DTOs.Private
+namespace Raythos.DTOs.Private.OrderItemDtos
 {
     public class CreateOrderItemDto
     {

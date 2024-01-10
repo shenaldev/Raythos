@@ -1,4 +1,5 @@
-﻿using Raythos.DTOs.Private;
+﻿using Raythos.DTOs.Private.CartDtos;
+using Raythos.DTOs.Private.OrderItemDtos;
 
 namespace Raythos.Interfaces
 {

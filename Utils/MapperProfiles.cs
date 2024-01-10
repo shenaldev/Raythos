@@ -3,7 +3,9 @@ using Raythos.DTOs;
 using Raythos.DTOs.AddressDtos;
 using Raythos.DTOs.Aircrafts;
 using Raythos.DTOs.Categories;
-using Raythos.DTOs.Private;
+using Raythos.DTOs.Private.CartDtos;
+using Raythos.DTOs.Private.OrderDtos;
+using Raythos.DTOs.Private.OrderItemDtos;
 using Raythos.Models;
 
 namespace Raythos.Utils

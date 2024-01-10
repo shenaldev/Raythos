@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Raythos.DTOs.Private;
+using Raythos.DTOs.Private.CartDtos;
+using Raythos.DTOs.Private.OrderDtos;
 using Raythos.Interfaces;
 using Raythos.Responses;
 using Raythos.Utils;

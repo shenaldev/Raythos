@@ -1,18 +1,21 @@
-﻿using Raythos.DTOs.AddressDtos;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace Raythos.DTOs.Private
+namespace Raythos.DTOs.Private.OrderDtos
 {
-    public class OrderDto
+    public class CreateOrderDto
     {
         public long Id { get; set; }
-        public decimal Total { get; set; }
+
+        [Required]
+        public decimal? Total { get; set; }
         public string Status { get; set; } = "Pending";
+
+        [Required]
         public long? UserId { get; set; }
+
+        [Required]
         public long? AddressId { get; set; }
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
-
-        public UserDto? User { get; set; }
-        public AddressDto? Address { get; set; }
     }
 }

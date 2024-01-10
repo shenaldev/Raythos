@@ -1,4 +1,4 @@
-﻿using Raythos.DTOs.Private;
+﻿using Raythos.DTOs.Private.CartDtos;
 
 namespace Raythos.Interfaces
 {

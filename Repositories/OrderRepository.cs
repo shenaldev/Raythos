@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using Raythos.DTOs.Private;
+using Raythos.DTOs.Private.CartDtos;
+using Raythos.DTOs.Private.OrderDtos;
 using Raythos.Interfaces;
 using Raythos.Models;
 

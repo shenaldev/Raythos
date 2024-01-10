@@ -1,8 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Raythos.DTOs.Aircrafts;
+using System.ComponentModel.DataAnnotations;
 
-namespace Raythos.DTOs.Private
+namespace Raythos.DTOs.Private.CartDtos
 {
-    public class CreateCartDto
+    public class CartDto
     {
         public long Id { get; set; }
 
@@ -21,5 +22,7 @@ namespace Raythos.DTOs.Private
 
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
+
+        public CartAircraftDto Aircraft { get; set; } = null!;
     }
 }

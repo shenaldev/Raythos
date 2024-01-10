@@ -1,6 +1,8 @@
-﻿namespace Raythos.DTOs.Private
+﻿using Raythos.DTOs.Aircrafts;
+
+namespace Raythos.DTOs.Private.OrderItemDtos
 {
-    public class OrderItemDto
+    public class SingleOrderItemDto
     {
         public long Id { get; set; }
         public long OrderId { get; set; }
@@ -10,5 +12,7 @@
         public string? Customizations { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
+
+        public AircraftDto? Aircraft { get; set; }
     }
 }
