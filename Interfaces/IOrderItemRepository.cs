@@ -7,5 +7,7 @@ namespace Raythos.Interfaces
         Task<ICollection<OrderItemDto>> GetOrderItems(long orderId);
 
         Task<bool> AddOrderItem(long orderId, CartDto cartItem);
+
+        Task<bool> DeleteOrderItem(long id);
     }
 }

@@ -27,5 +27,7 @@ namespace Raythos.Models
 
         public User User { get; set; } = null!;
         public Address Address { get; set; } = null!;
+
+        public ICollection<OrderItem> OrderItems { get; set; } = null!;
     }
 }

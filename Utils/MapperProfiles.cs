@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Raythos.DTOs;
-using Raythos.DTOs.Address;
+using Raythos.DTOs.AddressDtos;
 using Raythos.DTOs.Aircrafts;
 using Raythos.DTOs.Categories;
 using Raythos.DTOs.Private;
@@ -48,10 +48,12 @@ namespace Raythos.Utils
             CreateMap<Cart, CreateCartDto>();
             CreateMap<CreateCartDto, Cart>();
 
+            // Orders Mapping
             CreateMap<Order, OrderDto>();
             CreateMap<OrderDto, Order>();
             CreateMap<Order, CreateOrderDto>();
             CreateMap<CreateOrderDto, Order>();
+            CreateMap<Order, SingleOrderDto>();
 
             CreateMap<OrderItem, OrderItemDto>();
             CreateMap<OrderItemDto, OrderItem>();

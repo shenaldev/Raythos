@@ -56,5 +56,25 @@ namespace Raythos.Repositories
                 return false;
             }
         }
+
+        public async Task<bool> DeleteOrderItem(long id)
+        {
+            try
+            {
+                OrderItem? orderItem = await _context.OrderItems.FindAsync(id);
+                if (orderItem == null)
+                {
+                    return false;
+                }
+
+                _context.OrderItems.Remove(orderItem);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
 }

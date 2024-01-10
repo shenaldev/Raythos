@@ -20,7 +20,12 @@ namespace Raythos.Repositories
         public async Task<ICollection<OrderDto>> GetOrders(int skip, int take = 15)
         {
             return _mapper.Map<ICollection<OrderDto>>(
-                await _context.Orders.Skip(skip).Take(take).ToListAsync()
+                await _context.Orders
+                    .Include(o => o.User)
+                    .Include(o => o.Address)
+                    .Skip(skip)
+                    .Take(take)
+                    .ToListAsync()
             );
         }
 
@@ -42,6 +47,17 @@ namespace Raythos.Repositories
         public async Task<OrderDto?> GetOrder(long id)
         {
             return _mapper.Map<OrderDto>(await _context.Orders.FindAsync(id));
+        }
+
+        public async Task<SingleOrderDto?> GetOrderAdmin(long id)
+        {
+            return _mapper.Map<SingleOrderDto>(
+                await _context.Orders
+                    .Include(o => o.User)
+                    .Include(o => o.Address)
+                    .Include(o => o.OrderItems)
+                    .FirstOrDefaultAsync(o => o.Id == id)
+            );
         }
 
         public async Task<OrderDto?> CreateOrder(CreateOrderDto order)
@@ -67,17 +83,48 @@ namespace Raythos.Repositories
             throw new System.NotImplementedException();
         }
 
-        public Task<bool> UpdateOrderStatus(long id, string status)
+        public async Task<bool> UpdateOrderStatus(long id, string status)
         {
-            throw new System.NotImplementedException();
+            try
+            {
+                Order? order = await _context.Orders.FindAsync(id);
+                if (order == null)
+                {
+                    return false;
+                }
+
+                order.Status = status;
+                order.UpdatedAt = DateTime.Now;
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
-        public Task<bool> DeleteOrder(long id)
+        public async Task<bool> DeleteOrder(long id)
         {
-            throw new System.NotImplementedException();
+            try
+            {
+                Order? order = await _context.Orders.FindAsync(id);
+                if (order == null)
+                {
+                    return false;
+                }
+
+                _context.Orders.Remove(order);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
-        public async Task<bool> OrderExists(long id)
+        public async Task<bool> IsOrderExists(long id)
         {
             return await _context.Orders.AnyAsync(o => o.Id == id);
         }

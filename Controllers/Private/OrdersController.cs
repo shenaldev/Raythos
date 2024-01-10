@@ -60,7 +60,7 @@ namespace Raythos.Controllers.Private
             JWTHelper jWTHelper = new(_userInterface);
             long userID = await jWTHelper.GetUserID(User);
 
-            if (!await _orderRepository.OrderExists(id))
+            if (!await _orderRepository.IsOrderExists(id))
             {
                 return NotFound();
             }

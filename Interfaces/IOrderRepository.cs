@@ -10,6 +10,8 @@ namespace Raythos.Interfaces
 
         Task<OrderDto?> GetOrder(long id);
 
+        Task<SingleOrderDto?> GetOrderAdmin(long id);
+
         Task<OrderDto?> CreateOrder(CreateOrderDto dto);
 
         Task<OrderDto?> UpdateOrder(long id, CreateCartDto dto);
@@ -18,7 +20,7 @@ namespace Raythos.Interfaces
 
         Task<bool> DeleteOrder(long id);
 
-        Task<bool> OrderExists(long id);
+        Task<bool> IsOrderExists(long id);
 
         Task<int> GetOrdersCount();
 
