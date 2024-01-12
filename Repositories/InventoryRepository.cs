@@ -38,9 +38,8 @@ namespace Raythos.Repositories
                 await _context.SaveChangesAsync();
                 return newItem;
             }
-            catch (Exception e)
+            catch
             {
-                throw e;
                 return null;
             }
         }
