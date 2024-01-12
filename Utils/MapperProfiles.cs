@@ -3,6 +3,7 @@ using Raythos.DTOs;
 using Raythos.DTOs.AddressDtos;
 using Raythos.DTOs.Aircrafts;
 using Raythos.DTOs.Categories;
+using Raythos.DTOs.InventoryDtos;
 using Raythos.DTOs.Private.CartDtos;
 using Raythos.DTOs.Private.OrderDtos;
 using Raythos.DTOs.Private.OrderItemDtos;
@@ -63,6 +64,12 @@ namespace Raythos.Utils
             CreateMap<OrderItem, CreateOrderItemDto>();
             CreateMap<CreateOrderItemDto, OrderItem>();
             CreateMap<OrderItem, SingleOrderItemDto>();
+
+            // Inventories Mapping
+            CreateMap<Inventory, CreateInventoryDto>();
+            CreateMap<CreateInventoryDto, Inventory>();
+            CreateMap<Inventory, UpdateInventoryDto>();
+            CreateMap<UpdateInventoryDto, Inventory>();
         }
     }
 }
