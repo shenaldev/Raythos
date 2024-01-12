@@ -102,7 +102,7 @@ namespace Raythos.Controllers.Admin
                 foreach (AircraftOptionDto option in aircraftOptions)
                 {
                     option.AircraftId = newAircraft.Id;
-                    _aircraftOptionsRepository.AddCustomization(option);
+                    await _aircraftOptionsRepository.AddCustomization(option);
                 }
             }
 

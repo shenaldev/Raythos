@@ -8,7 +8,7 @@ namespace Raythos.DTOs.Aircrafts
         public string Model { get; set; } = null!;
         public string Image { get; set; } = null!;
         public string SerialNumber { get; set; } = null!;
-        public DateTime ManufacturedDate { get; set; }
+        public string ManufacturedDate { get; set; } = null!;
         public string? EngineType { get; set; }
 
         [Required]
