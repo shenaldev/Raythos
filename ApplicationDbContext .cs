@@ -21,6 +21,7 @@ namespace Raythos
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<Payment> Payments { get; set; }
+        public DbSet<Inventory> Inventories { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -50,6 +51,8 @@ namespace Raythos
             modelBuilder.Entity<OrderItem>().Property(oi => oi.Id).ValueGeneratedOnAdd();
 
             modelBuilder.Entity<Payment>().Property(p => p.Id).ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<Inventory>().Property(i => i.Id).ValueGeneratedOnAdd();
         }
     }
 }
