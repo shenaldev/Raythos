@@ -94,11 +94,6 @@ namespace Raythos.Controllers.Admin
                 return NotFound();
             }
 
-            if (await _inventoryRepository.IsInventoryItemExists(inventory.Name))
-            {
-                return BadRequest("Item already exists");
-            }
-
             var updatedInventory = await _inventoryRepository.UpdateInventoryAsync(id, inventory);
 
             if (updatedInventory == null)

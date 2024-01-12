@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Raythos.DTOs;
 using Raythos.Interfaces;
-using Raythos.Models;
 using Raythos.Responses;
 
 namespace Raythos.Controllers.Admin
@@ -58,19 +57,22 @@ namespace Raythos.Controllers.Admin
             {
                 return BadRequest(ModelState);
             }
+            var errors = new Dictionary<string, List<string>>();
 
             //Check Team Name Exists
             bool IsTeamExist = _teamRepository.IsTeamExists(team.Name);
             if (IsTeamExist)
             {
-                ErrorResponse error = new ErrorResponse(400, "Team Name Already Exists");
+                errors["Name"] = new List<string> { "Team is already exists" };
+                var error = ErrorResponse.CreateValidationError(errors);
                 return BadRequest(error);
             }
 
             TeamDto newTeam = _teamRepository.CreateTeam(team);
             if (newTeam == null)
             {
-                ErrorResponse error = new ErrorResponse(500, "Something Went Wrong");
+                errors["Name"] = new List<string> { "Something went wrong." };
+                var error = ErrorResponse.CreateValidationError(errors);
                 return StatusCode(500, error);
             }
 
@@ -86,9 +88,12 @@ namespace Raythos.Controllers.Admin
                 return BadRequest(ModelState);
             }
 
+            var errors = new Dictionary<string, List<string>>();
+
             if (team.Id != id)
             {
-                ErrorResponse error = new ErrorResponse(401, "Invalid Team Id");
+                errors["Name"] = new List<string> { "Invalid Team Id" };
+                var error = ErrorResponse.CreateValidationError(errors);
                 return BadRequest(error);
             }
 
@@ -101,14 +106,16 @@ namespace Raythos.Controllers.Admin
             bool IsTeamExist = _teamRepository.IsTeamExists(team.Name);
             if (IsTeamExist)
             {
-                ErrorResponse error = new ErrorResponse(400, "Team Name Already Exists");
+                errors["Name"] = new List<string> { "Team is already exists" };
+                var error = ErrorResponse.CreateValidationError(errors);
                 return BadRequest(error);
             }
 
             bool isUpdated = _teamRepository.UpdateTeam(id, team);
             if (!isUpdated)
             {
-                ErrorResponse error = new ErrorResponse(500, "Something Went Wrong");
+                errors["Name"] = new List<string> { "Something went wrong." };
+                var error = ErrorResponse.CreateValidationError(errors);
                 return StatusCode(500, error);
             }
 
@@ -124,10 +131,13 @@ namespace Raythos.Controllers.Admin
                 return NotFound();
             }
 
+            var errors = new Dictionary<string, List<string>>();
+
             bool isDeleted = _teamRepository.DeleteTeam(id);
             if (!isDeleted)
             {
-                ErrorResponse error = new ErrorResponse(500, "Something Went Wrong");
+                errors["Name"] = new List<string> { "Something went wrong." };
+                var error = ErrorResponse.CreateValidationError(errors);
                 return StatusCode(500, error);
             }
 

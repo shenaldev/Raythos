@@ -54,16 +54,18 @@ namespace Raythos.Controllers.Admin
                 return NotFound();
             }
 
+            var errors = new Dictionary<string, List<string>>();
+
             if (teamMember.UserId == 0)
             {
-                ErrorResponse error = new ErrorResponse(401, "UserId Is Required Field");
-                return StatusCode(401, error);
+                errors["Name"] = new List<string> { "UserId Is Required Field." };
+                return StatusCode(401, errors);
             }
 
             if (_teamMemberRepository.IsTeamMemberExists(teamId, teamMember.UserId))
             {
-                ErrorResponse error = new ErrorResponse(401, "User already exists in this team");
-                return StatusCode(401, error);
+                errors["Name"] = new List<string> { "User already exists in this team." };
+                return StatusCode(401, errors);
             }
 
             TeamMemberDto newTeamMember = _teamMemberRepository.CreateTeamMember(
@@ -73,8 +75,8 @@ namespace Raythos.Controllers.Admin
 
             if (newTeamMember == null)
             {
-                ErrorResponse error = new ErrorResponse(500, "Something Went Wrong");
-                return StatusCode(500, error);
+                errors["Name"] = new List<string> { "Something went wrong." };
+                return StatusCode(500, errors);
             }
 
             return Ok(newTeamMember);
@@ -95,11 +97,12 @@ namespace Raythos.Controllers.Admin
             }
 
             bool IsDeleted = _teamMemberRepository.DeleteTeamMember(teamId, userId);
+            var errors = new Dictionary<string, List<string>>();
 
             if (!IsDeleted)
             {
-                ErrorResponse error = new ErrorResponse(500, "Something Went Wrong");
-                return StatusCode(500, error);
+                errors["Name"] = new List<string> { "Something went wrong." };
+                return StatusCode(500, errors);
             }
 
             return Ok("Member deleted successfully.");
